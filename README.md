@@ -29,8 +29,6 @@ To run automated tests:
 3. Add environment variable `GROQ_API_KEY` (Settings → Environment Variables) so "Ask Nari" chat works. Get a free key at [console.groq.com](https://console.groq.com).
 4. Deploy. Every push builds and ships automatically.
 
-All images and assets live inside this repo (`src/assets/`, `public/`) — no CDN pointers, no external storage. What you push is what ships.
-
 ## Tech Stack
 | Technology | Description |
 | --- | --- |
