@@ -39,7 +39,7 @@ export function WelcomeScreen() {
               Welcome to your safe space.
             </h1>
             <p className="mt-4 text-sm text-muted-foreground leading-relaxed md:text-base">
-              Hey yaar! I'm Nari. I'm here for all your cycle rants and health questions, with absolutely zero judgment. Tell me a bit about yourself so we can vibe better!
+              Hi yaar! I'm Nari. I'm here for all your cycle rants and health questions, with absolutely zero judgment. Tell me a bit about yourself so we can vibe better!
             </p>
           </div>
 
@@ -103,7 +103,7 @@ export function WelcomeScreen() {
             </motion.div>
           </form>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.7, duration: 0.6 }}
