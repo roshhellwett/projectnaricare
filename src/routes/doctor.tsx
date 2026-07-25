@@ -317,6 +317,30 @@ function DoctorPage() {
     );
   }
 
+  if (ready && !a) {
+    return (
+      <div className="mx-auto max-w-4xl px-6 py-16 print:hidden">
+        <motion.div 
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-12 rounded-2xl border border-accent-gold-soft/30 bg-gradient-to-br from-accent-gold-soft/10 via-transparent to-accent-rose/5 p-6 md:p-10 text-center flex flex-col items-center"
+        >
+          <Activity className="h-10 w-10 text-accent-gold-soft mb-4" />
+          <h2 className="font-serif text-3xl mb-3">Hi {profile?.name || "there"}!</h2>
+          <p className="text-muted-foreground max-w-xl mb-8">
+            To help you prepare for your doctor's visit, I need to understand your body's story first. Let's do a quick check-in so I can generate the perfect questions for your doctor!
+          </p>
+          <Link
+            to="/assessment"
+            className="btn-primary-glow flex-none inline-flex items-center gap-2 rounded-full px-8 py-4 text-base font-semibold whitespace-nowrap shadow-lg shadow-accent-gold-soft/20"
+          >
+            Take Assessment
+          </Link>
+        </motion.div>
+      </div>
+    );
+  }
+
   const activeTests = status === 'complete' ? aiTests : fallbackData.tests;
   const activeQuestions = status === 'complete' ? aiQuestions : fallbackData.questions;
 

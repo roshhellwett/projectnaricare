@@ -48,7 +48,7 @@ export function SiteFooter() {
         </p>
 
         <p className="text-xs text-muted-foreground/70 font-mono uppercase tracking-widest">
-          Your Cycle · Your Story · Your Safe Space
+          Har Nari Ki Saheli
         </p>
 
         {/* Data controls */}

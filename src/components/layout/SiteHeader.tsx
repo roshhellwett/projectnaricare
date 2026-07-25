@@ -28,7 +28,7 @@ export function SiteHeader() {
                 NariCare
               </span>
               <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-accent-gold-soft/80">
-                Your Cycle · Your Story · Your Safe Space
+                Har Nari Ki Saheli
               </div>
             </div>
           </Link>
