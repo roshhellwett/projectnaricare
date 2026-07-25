@@ -118,6 +118,8 @@ function AssessmentPage() {
     if (n === 1) {
       if (!raw.age || raw.age < 10 || raw.age > 60 || !Number.isInteger(raw.age))
         return "Please enter an age between 10 and 60.";
+      if (raw.periodLength >= raw.cycleLength)
+        return "Your period length cannot be greater than or equal to your cycle length.";
     }
     if (n === 2) {
       if (raw.variation < 0) return "Pick how much your cycle varies.";

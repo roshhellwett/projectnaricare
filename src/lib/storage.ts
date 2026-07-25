@@ -1,4 +1,5 @@
 // Typed localStorage helpers. All keys namespaced under `naricare:`.
+import { toast } from "sonner";
 
 export type Symptom =
   | "acne"
@@ -113,8 +114,14 @@ function write<T>(key: string, value: T) {
   if (!isBrowser()) return;
   try {
     window.localStorage.setItem(key, JSON.stringify(value));
-  } catch {
-    /* quota / private mode — silent */
+  } catch (err: any) {
+    if (err.name === 'QuotaExceededError' || err.code === 22) {
+      toast.error("Storage Full", { 
+        description: "Your browser storage is full. Some data could not be saved." 
+      });
+    } else {
+      console.error("Storage write failed", err);
+    }
   }
 }
 

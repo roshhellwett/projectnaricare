@@ -4,6 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 import tsConfigPaths from "vite-tsconfig-paths";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import { nitro } from "nitro/vite";
+import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig(({ command }) => {
   const plugins = [
@@ -15,6 +16,34 @@ export default defineConfig(({ command }) => {
       },
     }),
     react(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      injectRegister: 'auto',
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+        maximumFileSizeToCacheInBytes: 5000000
+      },
+      manifest: {
+        name: 'NariCare',
+        short_name: 'NariCare',
+        description: 'Privacy-first cycle and health tracker.',
+        theme_color: '#1a1515',
+        background_color: '#1a1515',
+        display: 'standalone',
+        icons: [
+          {
+            src: 'pwa-192x192.png',
+            sizes: '192x192',
+            type: 'image/png'
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png'
+          }
+        ]
+      }
+    }),
   ];
 
   if (command === "build") {
