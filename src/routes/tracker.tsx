@@ -111,7 +111,7 @@ function TrackerPage() {
     setRemedies((cur) => (cur.includes(r) ? cur.filter((x) => x !== r) : [...cur, r]));
 
   return (
-    <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10 md:py-16">
+      <div className="relative z-10 mx-auto max-w-6xl px-4 py-8 sm:px-6 md:py-12">
       <div className="text-center">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -138,7 +138,7 @@ function TrackerPage() {
         </motion.p>
       </div>
 
-      <div className="mt-8 md:mt-12 grid gap-6 md:gap-8 lg:grid-cols-[1fr_1.2fr]">
+      <div className="mt-8 md:mt-12 grid gap-10 lg:grid-cols-[1.2fr_1fr]">
         {/* LOG FORM */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
@@ -276,8 +276,8 @@ function TrackerPage() {
           </div>
         </motion.div>
 
-        {/* SUMMARY + LOG */}
-        <div className="space-y-6">
+        {/* RIGHT COLUMN */}
+        <div className="space-y-6 flex flex-col h-full">
           <div className="grid gap-4 sm:grid-cols-2">
             <motion.div
               initial={{ opacity: 0, y: 16 }}
@@ -307,7 +307,7 @@ function TrackerPage() {
             </motion.div>
           </div>
 
-          <div className="glass-card p-6">
+          <div className="glass-card p-6 flex flex-col flex-1 overflow-hidden min-h-[400px]">
             <h3 className="font-serif text-lg">Recent entries</h3>
             {!ready ? (
               <div className="mt-4">
@@ -318,7 +318,7 @@ function TrackerPage() {
                 No entries yet. Add today's to get started.
               </p>
             ) : (
-              <motion.ul layout className="mt-4 space-y-3">
+              <motion.ul layout className="mt-4 space-y-3 overflow-y-auto scrollbar-hide pr-1 pb-2 flex-1">
                 <AnimatePresence initial={false}>
                   {[...entries]
                     .reverse()

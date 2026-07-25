@@ -126,6 +126,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,450;0,9..144,600;1,9..144,450&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap",
       },
     ],
+    scripts: [
+      {
+        type: "text/javascript",
+        children: `
+          if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+              navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW reg failed: ', err));
+            });
+          }
+        `,
+      },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,

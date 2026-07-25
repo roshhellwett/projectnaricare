@@ -1,13 +1,26 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
+import { Download } from "lucide-react";
 import { storage } from "@/lib/storage";
+import { usePWAInstall } from "@/hooks/usePWAInstall";
 
 import logoUrl from "@/assets/logo.png";
 
 export function SiteFooter() {
   const [showData, setShowData] = useState(false);
   const [clearing, setClearing] = useState(false);
+  const { isInstallable, isInstalled, install } = usePWAInstall();
+
+  const handleInstall = async () => {
+    if (await install()) return;
+
+    toast("Install NariCare", {
+      description: isInstallable
+        ? "Your browser is preparing the install prompt. Please try again in a moment."
+        : "Use your browser menu and choose “Install app” or “Add to Home Screen.”",
+    });
+  };
 
   const confirmClear = () => {
     storage.clearAll();
@@ -68,12 +81,23 @@ export function SiteFooter() {
             </Link>
           </nav>
 
-          <button
-            onClick={() => setShowData((open) => !open)}
-            className="self-start rounded-full border border-hairline/40 px-3 py-1.5 text-[10px] font-mono uppercase tracking-[0.12em] text-muted-foreground/80 transition-colors hover:border-accent-gold-soft/50 hover:text-accent-gold-soft sm:self-auto"
-          >
-            {showData ? "Hide data settings" : "Manage Data"}
-          </button>
+          <div className="flex flex-wrap gap-2 self-start sm:self-auto">
+            {!isInstalled && (
+              <button
+                onClick={handleInstall}
+                className="flex items-center gap-1.5 rounded-full bg-accent-rose/20 border border-accent-rose/30 px-3 py-1.5 text-[10px] font-mono uppercase tracking-[0.12em] text-accent-rose shadow-md shadow-accent-rose/10 transition-transform hover:bg-accent-rose/30 active:scale-95"
+              >
+                <Download className="h-3 w-3" />
+                Install App
+              </button>
+            )}
+            <button
+              onClick={() => setShowData((open) => !open)}
+              className="rounded-full border border-hairline/40 px-3 py-1.5 text-[10px] font-mono uppercase tracking-[0.12em] text-muted-foreground/80 transition-colors hover:border-accent-gold-soft/50 hover:text-accent-gold-soft"
+            >
+              {showData ? "Hide data settings" : "Manage Data"}
+            </button>
+          </div>
         </div>
 
         {showData && (

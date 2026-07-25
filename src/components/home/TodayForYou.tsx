@@ -14,6 +14,7 @@ function daysBetween(a: Date, b: Date) {
 
 function useNextPeriod() {
   const { entries } = useTracker();
+  const { assessment } = useAssessment();
   return useMemo(() => {
     const flowDays = entries
       .filter((e) => e.flow !== "none")
@@ -33,12 +34,19 @@ function useNextPeriod() {
       else groups.push([d]);
     }
     const starts = groups.map((g) => new Date(g[0]));
-    if (starts.length < 2) return { lastLog: flowDays[flowDays.length - 1] };
-    const gaps: number[] = [];
-    for (let i = 1; i < starts.length; i++) {
-      gaps.push(daysBetween(starts[i], starts[i - 1]));
+    let avg = 28; // global fallback
+    if (starts.length < 2) {
+      if (assessment?.raw?.cycleLength) {
+        avg = assessment.raw.cycleLength;
+      }
+    } else {
+      const gaps: number[] = [];
+      for (let i = 1; i < starts.length; i++) {
+        gaps.push(daysBetween(starts[i], starts[i - 1]));
+      }
+      avg = Math.round(gaps.reduce((a, b) => a + b, 0) / gaps.length);
     }
-    const avg = Math.round(gaps.reduce((a, b) => a + b, 0) / gaps.length);
+    
     const next = new Date(starts[starts.length - 1].getTime() + avg * 86400000);
     const diff = daysBetween(next, new Date());
     return {
@@ -46,7 +54,7 @@ function useNextPeriod() {
       inDays: diff,
       avg,
     };
-  }, [entries]);
+  }, [entries, assessment]);
 }
 
 export function TodayForYou() {
