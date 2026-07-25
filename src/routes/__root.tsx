@@ -192,7 +192,7 @@ function RootComponent() {
       />
       <div className="flex min-h-[100dvh] flex-col">
         <SiteHeader />
-        <main className="flex-1 relative">
+        <main className="flex-1 relative pb-[calc(env(safe-area-inset-bottom,0)+80px)] md:pb-0">
           <AnimatePresence mode="wait">
             <motion.div
               key={location.pathname}
@@ -206,6 +206,7 @@ function RootComponent() {
             </motion.div>
           </AnimatePresence>
         </main>
+
         <SiteFooter />
         <BottomNav />
         <FloatingChat />

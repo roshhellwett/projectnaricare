@@ -82,19 +82,19 @@ function Home() {
       <FloatingOrbs />
 
       {/* HERO */}
-      <section className="relative z-10 overflow-hidden min-h-[80vh] md:min-h-[90vh] flex items-center">
+      <section className="relative z-10 overflow-hidden flex items-center">
         <motion.div
           style={{ y: heroY }}
-          className="mx-auto w-full grid max-w-7xl gap-8 md:gap-14 px-4 sm:px-6 py-12 md:py-20 md:grid-cols-[1.1fr_0.9fr] md:items-center"
+          className="mx-auto w-full grid max-w-7xl gap-8 md:gap-14 px-4 sm:px-6 lg:px-8 py-10 sm:py-14 md:py-20 md:grid-cols-[1.1fr_0.9fr] md:items-center"
         >
-          <motion.div initial="hidden" animate="show" variants={fadeUp}>
-            <motion.div variants={itemFade} className="eyebrow mb-6">
+          <motion.div initial="hidden" animate="show" variants={fadeUp} className="order-2 md:order-1">
+            <motion.div variants={itemFade} className="eyebrow mb-4 sm:mb-6">
               <Sparkles className="h-3 w-3" /> A safe space for every Indian woman
             </motion.div>
 
             <motion.h1
               variants={itemFade}
-              className="font-serif text-3xl leading-[1.08] sm:text-4xl md:text-5xl lg:text-7xl tracking-tight"
+              className="font-serif text-fluid-hero tracking-tight"
             >
               Your body has a story, {profile?.name || "Nari"}. <br className="hidden md:block" />
               Let <em className="italic text-transparent bg-clip-text bg-gradient-to-r from-accent-gold-soft to-accent-rose pb-2 pr-2">
@@ -105,7 +105,7 @@ function Home() {
 
             <motion.p
               variants={itemFade}
-              className="mt-5 sm:mt-8 max-w-xl text-base md:text-lg lg:text-xl text-muted-foreground leading-relaxed"
+              className="mt-4 sm:mt-6 max-w-xl text-base md:text-lg lg:text-xl text-muted-foreground leading-relaxed"
             >
               Welcome to your safe haven. A quiet, private space free from judgment where you can
               understand your body, track your cycle, and ask the questions you've always wanted to ask.
@@ -114,17 +114,17 @@ function Home() {
               love, and absolute privacy.
             </motion.p>
 
-            <motion.div variants={itemFade} className="mt-6 sm:mt-10 flex flex-wrap gap-3 sm:gap-4">
+            <motion.div variants={itemFade} className="mt-6 sm:mt-10 flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4">
               <Link
                 to="/assessment"
-                className="btn-primary-glow group inline-flex items-center gap-2 sm:gap-3 rounded-full px-6 py-3 sm:px-8 sm:py-4 text-sm sm:text-base font-semibold"
+                className="btn-primary-glow group inline-flex w-full sm:w-auto items-center justify-center gap-2 sm:gap-3 rounded-full px-6 py-3.5 sm:px-8 sm:py-4 text-sm sm:text-base font-semibold min-h-[48px]"
               >
                 Begin my check-in{" "}
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
               <Link
                 to="/ask"
-                className="group relative inline-flex items-center gap-2 sm:gap-3 rounded-full px-6 py-3 sm:px-8 sm:py-4 text-sm sm:text-base font-semibold bg-white/5 border border-white/10 hover:bg-white/10 hover:border-accent-gold-soft/50 transition-all duration-300"
+                className="group relative inline-flex w-full sm:w-auto items-center justify-center gap-2 sm:gap-3 rounded-full px-6 py-3.5 sm:px-8 sm:py-4 text-sm sm:text-base font-semibold bg-white/5 border border-white/10 hover:bg-white/10 hover:border-accent-gold-soft/50 transition-all duration-300 min-h-[48px]"
               >
                 <div className="absolute inset-0 rounded-full bg-gradient-to-r from-accent-gold-soft/0 to-accent-gold-soft/0 group-hover:from-accent-gold-soft/10 group-hover:to-accent-rose/10 transition-all duration-500" />
                 <MessageCircle className="h-4 w-4 text-accent-gold-soft" />
@@ -134,7 +134,7 @@ function Home() {
 
             <motion.p
               variants={itemFade}
-              className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground/80"
+              className="mt-6 sm:mt-8 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground/80"
             >
               <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-accent-gold-soft" />
               <span>No sign-up</span>
@@ -147,18 +147,19 @@ function Home() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, scale: 0.8, filter: "blur(20px)" }}
-            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-            transition={{ duration: 1.5, ease: "easeOut", delay: 0.3 }}
-            className="relative flex justify-center"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
+            className="order-1 md:order-2 relative flex justify-center"
           >
-            <div className="absolute inset-0 bg-gradient-to-tr from-accent-rose/20 to-accent-gold-soft/20 blur-[100px] rounded-full z-0" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-accent-rose/20 to-accent-gold-soft/20 blur-[80px] rounded-full z-0" />
             <div className="relative z-10 drop-shadow-[0_0_40px_rgba(240,201,137,0.15)]">
               <CycleWheel />
             </div>
           </motion.div>
         </motion.div>
       </section>
+
 
 
     </div>
