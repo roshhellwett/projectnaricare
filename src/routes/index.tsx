@@ -47,22 +47,24 @@ function FloatingOrbs() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
       <motion.div
+        style={{ willChange: "transform, opacity" }}
         animate={{
           y: [0, -20, 0],
           x: [0, 15, 0],
           opacity: [0.3, 0.5, 0.3],
         }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-[20%] left-[10%] h-[200px] w-[200px] sm:h-[300px] sm:w-[300px] md:h-[400px] md:w-[400px] rounded-full bg-accent-gold-soft/10 blur-[80px]"
+        className="absolute top-[20%] left-[10%] h-[200px] w-[200px] sm:h-[300px] sm:w-[300px] md:h-[400px] md:w-[400px] rounded-full bg-[radial-gradient(circle_at_center,var(--accent-gold-soft)_0%,transparent_70%)]"
       />
       <motion.div
+        style={{ willChange: "transform, opacity" }}
         animate={{
           y: [0, 30, 0],
           x: [0, -20, 0],
           opacity: [0.2, 0.4, 0.2],
         }}
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-        className="absolute bottom-[20%] right-[5%] h-[250px] w-[250px] sm:h-[350px] sm:w-[350px] md:h-[500px] md:w-[500px] rounded-full bg-accent-rose/10 blur-[100px]"
+        className="absolute bottom-[20%] right-[5%] h-[250px] w-[250px] sm:h-[350px] sm:w-[350px] md:h-[500px] md:w-[500px] rounded-full bg-[radial-gradient(circle_at_center,var(--accent-rose)_0%,transparent_70%)]"
       />
     </div>
   );
@@ -80,7 +82,6 @@ function Home() {
       {/* HERO */}
       <section className="relative z-10 overflow-hidden flex items-center">
         <motion.div
-          style={{ y: heroY }}
           className="mx-auto w-full grid max-w-7xl gap-8 md:gap-14 px-4 sm:px-6 lg:px-8 py-10 sm:py-14 md:py-20 md:grid-cols-[1.1fr_0.9fr] md:items-center"
         >
           <motion.div
