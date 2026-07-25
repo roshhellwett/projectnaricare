@@ -29,13 +29,10 @@ export default defineConfig(({ command }) => {
   return {
     plugins,
     resolve: {
-      alias: {
-        tslib: "tslib/tslib.es6.mjs",
-      },
       dedupe: ["react", "react-dom", "@tanstack/react-router"],
     },
     ssr: {
-      noExternal: ["recharts", "lucide-react"],
+      noExternal: ["recharts", "lucide-react", "tslib"],
     },
   };
 });
