@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { RiskBloom } from "@/components/visuals/RiskBloom";
 import { CATEGORIES, computeScores, levelOf } from "@/lib/health/scoring";
@@ -8,6 +8,7 @@ import type { AssessmentRaw, SavedAssessment, Symptom } from "@/lib/storage";
 import { storage } from "@/lib/storage";
 import { useAssessment } from "@/hooks/useAssessment";
 import { ArrowRight, ArrowLeft, RotateCcw, MessageCircle } from "lucide-react";
+import { useProfile } from "@/lib/profile";
 
 export const Route = createFileRoute("/assessment")({
   head: () => ({
@@ -30,7 +31,7 @@ export const Route = createFileRoute("/assessment")({
   component: AssessmentPage,
 });
 
-const STEP_NAMES = ["Basics", "Regularity", "Flow & pain", "Symptoms", "Lifestyle"];
+const STEP_NAMES = ["Basics", "Regularity", "Flow & pain", "Symptoms", "Lifestyle", "Notes"];
 const SYMPTOMS: { key: Symptom; label: string }[] = [
   { key: "acne", label: "Persistent acne" },
   { key: "hirsutism", label: "Excess facial/body hair" },
@@ -93,14 +94,22 @@ const emptyRaw: AssessmentRaw = {
     pica: false,
     spotting: false,
   },
+  notes: "",
 };
 
 function AssessmentPage() {
   const { assessment, save } = useAssessment();
+  const { profile } = useProfile();
   const [showResults, setShowResults] = useState(!!assessment);
   const [raw, setRaw] = useState<AssessmentRaw>(assessment?.raw ?? emptyRaw);
   const [step, setStep] = useState(1);
   const [err, setErr] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (profile?.age && raw.age === 0) {
+      setRaw(r => ({ ...r, age: profile.age }));
+    }
+  }, [profile?.age]);
 
   const set = <K extends keyof AssessmentRaw>(k: K, v: AssessmentRaw[K]) =>
     setRaw((r) => ({ ...r, [k]: v }));
@@ -135,7 +144,7 @@ function AssessmentPage() {
       return;
     }
     setErr(null);
-    if (step < 5) setStep(step + 1);
+    if (step < 6) setStep(step + 1);
     else {
       const scores = computeScores(raw);
       const s: SavedAssessment = { savedAt: Date.now(), raw, scores };
@@ -179,7 +188,7 @@ function AssessmentPage() {
           transition={{ delay: 0.1 }}
           className="mt-4 font-serif text-4xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-accent-gold-soft to-accent-rose pb-2"
         >
-          Tell us about your last few cycles.
+          {profile?.name ? `Hi ${profile.name}, tell us about your last few cycles.` : "Tell us about your last few cycles."}
         </motion.h1>
         <motion.p
           initial={{ opacity: 0 }}
@@ -196,12 +205,12 @@ function AssessmentPage() {
           <motion.div
             className="h-full bg-gradient-to-r from-accent-gold to-accent-rose"
             initial={false}
-            animate={{ width: `${(step / 5) * 100}%` }}
+            animate={{ width: `${(step / 6) * 100}%` }}
             transition={{ duration: 0.4 }}
           />
         </div>
         <div className="mt-2 flex justify-between font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
-          <span>Step {step} of 5</span>
+          <span>Step {step} of 6</span>
           <span>{STEP_NAMES[step - 1]}</span>
         </div>
 
@@ -219,6 +228,7 @@ function AssessmentPage() {
             {step === 3 && <Step3 raw={raw} set={set} />}
             {step === 4 && <Step4 raw={raw} set={set} />}
             {step === 5 && <Step5 raw={raw} set={set} />}
+            {step === 6 && <Step6 raw={raw} set={set} />}
           </motion.div>
         </AnimatePresence>
 
@@ -240,7 +250,7 @@ function AssessmentPage() {
             onClick={next}
             className="btn-primary-glow inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-sm font-semibold"
           >
-            {step === 5 ? "See my results" : "Continue"} <ArrowRight className="h-4 w-4" />
+            {step === 6 ? "See my results" : "Continue"} <ArrowRight className="h-4 w-4" />
           </button>
         </div>
       </div>
@@ -647,6 +657,29 @@ function Step5({
             { value: 2, label: "Rarely" },
             { value: 3, label: "Intense training" },
           ]}
+        />
+      </Field>
+    </div>
+  );
+}
+
+function Step6({
+  raw,
+  set,
+}: {
+  raw: AssessmentRaw;
+  set: <K extends keyof AssessmentRaw>(k: K, v: AssessmentRaw[K]) => void;
+}) {
+  return (
+    <div>
+      <h3 className="mb-1 font-serif text-2xl">Additional Notes</h3>
+      <p className="mb-6 text-sm text-muted-foreground">Is there anything else you'd like to tell Didi about your cycle?</p>
+      <Field label="Your Notes (Optional)">
+        <textarea
+          className="w-full min-h-[120px] rounded-xl border border-hairline bg-surface p-4 text-sm focus:border-accent-gold focus:outline-none focus:ring-1 focus:ring-accent-gold"
+          placeholder="E.g., 'I get a weird shooting pain on my left side...' or 'My mood drops specifically on day 22...'"
+          value={raw.notes || ""}
+          onChange={(e) => set("notes", e.target.value)}
         />
       </Field>
     </div>

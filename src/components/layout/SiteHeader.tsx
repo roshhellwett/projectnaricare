@@ -1,9 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useState } from "react";
 import logoUrl from "@/assets/logo.png";
-
-import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
-import { Menu } from "lucide-react";
 
 const links = [
   { to: "/assessment", label: "Assessment" },
@@ -14,10 +10,8 @@ const links = [
 ] as const;
 
 export function SiteHeader() {
-  const [isOpen, setIsOpen] = useState(false);
-
   return (
-    <header className="sticky top-0 z-40 border-b border-hairline bg-[#1c1220]/60 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-hairline bg-[#1c1220]/60 backdrop-blur-xl print:hidden">
       <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-6 sm:py-4 md:grid-cols-[1fr_auto_1fr]">
         <div className="flex min-w-0 items-center justify-start">
           <Link to="/" className="group flex min-w-0 items-center gap-3">
@@ -33,9 +27,9 @@ export function SiteHeader() {
               <span className="truncate font-serif text-base sm:text-lg font-semibold tracking-tight">
                 NariCare
               </span>
-              <span className="truncate font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-                Cycle · Health · Care
-              </span>
+              <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-accent-gold-soft/80">
+                Your Cycle · Your Story · Your Safe Space
+              </div>
             </div>
           </Link>
         </div>
@@ -61,43 +55,6 @@ export function SiteHeader() {
           >
             Begin assessment
           </Link>
-
-          <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetTrigger asChild>
-              <button className="inline-flex items-center justify-center rounded-full p-2 text-muted-foreground hover:bg-surface-light hover:text-foreground md:hidden transition-colors">
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">Open menu</span>
-              </button>
-            </SheetTrigger>
-            <SheetContent
-              side="right"
-              className="glass-panel w-[85vw] max-w-[320px] !border-r-0 !border-t-0 !border-b-0 p-6"
-            >
-              <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
-              <div className="mt-8 flex flex-col gap-6">
-                {links.map((l) => (
-                  <Link
-                    key={l.to}
-                    to={l.to}
-                    onClick={() => setIsOpen(false)}
-                    className="text-lg font-medium text-muted-foreground transition-colors hover:text-accent-gold-soft"
-                    activeProps={{ className: "text-accent-gold-soft font-semibold" }}
-                  >
-                    {l.label}
-                  </Link>
-                ))}
-                <div className="mt-4 pt-6 border-t border-hairline">
-                  <Link
-                    to="/assessment"
-                    onClick={() => setIsOpen(false)}
-                    className="btn-primary-glow inline-flex w-full justify-center items-center rounded-full px-5 py-3 text-sm font-semibold"
-                  >
-                    Begin assessment
-                  </Link>
-                </div>
-              </div>
-            </SheetContent>
-          </Sheet>
         </div>
       </div>
     </header>

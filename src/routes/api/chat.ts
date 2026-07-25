@@ -6,6 +6,7 @@ import { SYSTEM_PROMPT } from "@/lib/health/context";
 type ChatBody = {
   messages?: UIMessage[];
   healthContext?: string;
+  profile?: { name: string; age: number };
 };
 
 export const Route = createFileRoute("/api/chat")({
@@ -39,9 +40,13 @@ export const Route = createFileRoute("/api/chat")({
             apiKey,
           });
 
-          const system = body.healthContext
+          let system = body.healthContext
             ? `${SYSTEM_PROMPT}\n\n=== HEALTH CONTEXT (user's own data) ===\n${body.healthContext}\n=== END CONTEXT ===`
             : SYSTEM_PROMPT;
+            
+          if (body.profile) {
+            system += `\n\nIMPORTANT: You are currently talking to ${body.profile.name}, who is ${body.profile.age} years old. Address her by her name naturally. Adjust your tone to be age-appropriate (e.g. more like a protective elder sister if she is a teenager).`;
+          }
 
           const result = streamText({
             model: groq("llama-3.3-70b-versatile"),

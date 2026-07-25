@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { CalendarHeart, Sparkles, MessageCircle } from "lucide-react";
 import { TodayForYouSkeleton } from "@/components/ui/page-skeleton";
+import { RestockPredictor } from "./RestockPredictor";
 import { useAssessment } from "@/hooks/useAssessment";
 import { useTracker } from "@/hooks/useTracker";
 import { CATEGORIES, levelOf } from "@/lib/health/scoring";
@@ -127,6 +128,8 @@ export function TodayForYou() {
             to="/ask"
           />
         </div>
+
+        <RestockPredictor nextPeriodInDays={nextPeriod?.inDays} />
       </div>
     </motion.div>
   );

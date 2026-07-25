@@ -41,6 +41,7 @@ export type AssessmentRaw = {
   familyPCOS: boolean;
   familyEndo: boolean;
   sym: Record<Symptom, boolean>;
+  notes?: string;
 };
 
 export type AssessmentScores = {
@@ -68,6 +69,7 @@ export type TrackerEntry = {
   pain: number; // 0-10
   mood: "great" | "good" | "meh" | "low" | "awful";
   symptoms: string[];
+  remedies?: string[];
   note?: string;
 };
 

@@ -17,12 +17,15 @@ import logoUrl from "@/assets/logo.png";
 import { AnimatedBackground } from "@/components/visuals/AnimatedBackground";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { BottomNav } from "@/components/layout/BottomNav";
 import { FloatingChat } from "@/components/chat/FloatingChat";
+import { WelcomeScreen } from "@/components/onboarding/WelcomeScreen";
+import { useProfile } from "@/lib/profile";
 
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center px-4">
+    <div className="flex min-h-[100dvh] items-center justify-center px-4">
       <motion.div
         initial={{ opacity: 0, y: 20, scale: 0.96 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -55,7 +58,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   }, [error]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4">
+    <div className="flex min-h-[100dvh] items-center justify-center px-4">
       <motion.div
         initial={{ opacity: 0, y: 20, scale: 0.96 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -97,18 +100,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" },
+      { name: "theme-color", content: "#4b2130" },
       {
-        title: "NariCare — AI-powered women's cycle & health companion",
+        title: "NariCare — India's most private, AI-powered women's health companion",
       },
       {
         name: "description",
         content:
-          "NariCare is an AI-powered menstrual & reproductive health hub for women. Run a 3-min risk assessment, track your cycle, ask Nari — your private AI health companion.",
+          "NariCare is an AI-powered menstrual & reproductive health hub for Indian women. Run a private assessment, track your cycle, and talk to Nari — your private AI 'Didi' and health companion.",
       },
       { name: "author", content: "NariCare" },
     ],
     links: [
+      { rel: "manifest", href: "/manifest.json" },
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: logoUrl, type: "image/png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -162,6 +167,15 @@ const pageVariants = {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const location = useLocation();
+  const { profile, isLoading } = useProfile();
+
+  if (isLoading) {
+    return null; // or a tiny loader
+  }
+
+  if (!profile) {
+    return <WelcomeScreen />;
+  }
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -176,7 +190,7 @@ function RootComponent() {
           },
         }}
       />
-      <div className="flex min-h-screen flex-col">
+      <div className="flex min-h-[100dvh] flex-col">
         <SiteHeader />
         <main className="flex-1 relative">
           <AnimatePresence mode="wait">
@@ -193,6 +207,7 @@ function RootComponent() {
           </AnimatePresence>
         </main>
         <SiteFooter />
+        <BottomNav />
         <FloatingChat />
       </div>
 

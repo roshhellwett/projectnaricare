@@ -11,10 +11,14 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AssessmentRouteImport } from './routes/assessment'
+import { Route as DisclaimerRouteImport } from './routes/disclaimer'
 import { Route as DoctorRouteImport } from './routes/doctor'
 import { Route as HistoryRouteImport } from './routes/history'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TrackerRouteImport } from './routes/tracker'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as ApiDoctorPrepRouteImport } from './routes/api/doctor-prep'
 import { Route as AskIndexRouteImport } from './routes/ask.index'
 import { Route as AskThreadIdRouteImport } from './routes/ask.$threadId'
 
@@ -28,6 +32,11 @@ const AssessmentRoute = AssessmentRouteImport.update({
   path: '/assessment',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DisclaimerRoute = DisclaimerRouteImport.update({
+  id: '/disclaimer',
+  path: '/disclaimer',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DoctorRoute = DoctorRouteImport.update({
   id: '/doctor',
   path: '/doctor',
@@ -38,6 +47,16 @@ const HistoryRoute = HistoryRouteImport.update({
   path: '/history',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TrackerRoute = TrackerRouteImport.update({
   id: '/tracker',
   path: '/tracker',
@@ -46,6 +65,11 @@ const TrackerRoute = TrackerRouteImport.update({
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
   path: '/api/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiDoctorPrepRoute = ApiDoctorPrepRouteImport.update({
+  id: '/api/doctor-prep',
+  path: '/api/doctor-prep',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AskIndexRoute = AskIndexRouteImport.update({
@@ -62,20 +86,28 @@ const AskThreadIdRoute = AskThreadIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/assessment': typeof AssessmentRoute
+  '/disclaimer': typeof DisclaimerRoute
   '/doctor': typeof DoctorRoute
   '/history': typeof HistoryRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
   '/tracker': typeof TrackerRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/doctor-prep': typeof ApiDoctorPrepRoute
   '/ask/$threadId': typeof AskThreadIdRoute
   '/ask/': typeof AskIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/assessment': typeof AssessmentRoute
+  '/disclaimer': typeof DisclaimerRoute
   '/doctor': typeof DoctorRoute
   '/history': typeof HistoryRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
   '/tracker': typeof TrackerRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/doctor-prep': typeof ApiDoctorPrepRoute
   '/ask/$threadId': typeof AskThreadIdRoute
   '/ask': typeof AskIndexRoute
 }
@@ -83,10 +115,14 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/assessment': typeof AssessmentRoute
+  '/disclaimer': typeof DisclaimerRoute
   '/doctor': typeof DoctorRoute
   '/history': typeof HistoryRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
   '/tracker': typeof TrackerRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/doctor-prep': typeof ApiDoctorPrepRoute
   '/ask/$threadId': typeof AskThreadIdRoute
   '/ask/': typeof AskIndexRoute
 }
@@ -95,30 +131,42 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/assessment'
+    | '/disclaimer'
     | '/doctor'
     | '/history'
+    | '/privacy'
+    | '/terms'
     | '/tracker'
     | '/api/chat'
+    | '/api/doctor-prep'
     | '/ask/$threadId'
     | '/ask/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/assessment'
+    | '/disclaimer'
     | '/doctor'
     | '/history'
+    | '/privacy'
+    | '/terms'
     | '/tracker'
     | '/api/chat'
+    | '/api/doctor-prep'
     | '/ask/$threadId'
     | '/ask'
   id:
     | '__root__'
     | '/'
     | '/assessment'
+    | '/disclaimer'
     | '/doctor'
     | '/history'
+    | '/privacy'
+    | '/terms'
     | '/tracker'
     | '/api/chat'
+    | '/api/doctor-prep'
     | '/ask/$threadId'
     | '/ask/'
   fileRoutesById: FileRoutesById
@@ -126,10 +174,14 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AssessmentRoute: typeof AssessmentRoute
+  DisclaimerRoute: typeof DisclaimerRoute
   DoctorRoute: typeof DoctorRoute
   HistoryRoute: typeof HistoryRoute
+  PrivacyRoute: typeof PrivacyRoute
+  TermsRoute: typeof TermsRoute
   TrackerRoute: typeof TrackerRoute
   ApiChatRoute: typeof ApiChatRoute
+  ApiDoctorPrepRoute: typeof ApiDoctorPrepRoute
   AskThreadIdRoute: typeof AskThreadIdRoute
   AskIndexRoute: typeof AskIndexRoute
 }
@@ -150,6 +202,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AssessmentRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/disclaimer': {
+      id: '/disclaimer'
+      path: '/disclaimer'
+      fullPath: '/disclaimer'
+      preLoaderRoute: typeof DisclaimerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/doctor': {
       id: '/doctor'
       path: '/doctor'
@@ -164,6 +223,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tracker': {
       id: '/tracker'
       path: '/tracker'
@@ -176,6 +249,13 @@ declare module '@tanstack/react-router' {
       path: '/api/chat'
       fullPath: '/api/chat'
       preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/doctor-prep': {
+      id: '/api/doctor-prep'
+      path: '/api/doctor-prep'
+      fullPath: '/api/doctor-prep'
+      preLoaderRoute: typeof ApiDoctorPrepRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ask/': {
@@ -198,10 +278,14 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AssessmentRoute: AssessmentRoute,
+  DisclaimerRoute: DisclaimerRoute,
   DoctorRoute: DoctorRoute,
   HistoryRoute: HistoryRoute,
+  PrivacyRoute: PrivacyRoute,
+  TermsRoute: TermsRoute,
   TrackerRoute: TrackerRoute,
   ApiChatRoute: ApiChatRoute,
+  ApiDoctorPrepRoute: ApiDoctorPrepRoute,
   AskThreadIdRoute: AskThreadIdRoute,
   AskIndexRoute: AskIndexRoute,
 }

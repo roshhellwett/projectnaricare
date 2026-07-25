@@ -358,3 +358,9 @@
     transform: scaleX(1);
   }
 }
+
+@media print {
+  @page {
+    margin: 0;
+  }
+}

@@ -9,6 +9,7 @@ import { useThreads } from "@/hooks/useThreads";
 import { buildHealthContext, buildContextDepHash } from "@/lib/health/context";
 import type { ChatThread, ThreadMessage } from "@/lib/storage";
 import { newId } from "@/lib/storage";
+import { useProfile } from "@/lib/profile";
 
 function toUIMessages(msgs: ThreadMessage[]): UIMessage[] {
   return msgs.map((m) => ({
@@ -75,6 +76,9 @@ export function ChatWindow({
     () => buildHealthContext(assessments, entries, threads, thread.id),
     [depHash, thread.id],
   );
+  
+  const { profile } = useProfile();
+  const hasData = assessments.length > 0 || entries.length > 0;
 
   const healthContextRef = useRef(healthContext);
   useEffect(() => {
@@ -86,10 +90,10 @@ export function ChatWindow({
       new DefaultChatTransport({
         api: "/api/chat",
         prepareSendMessagesRequest: ({ messages, body }) => ({
-          body: { messages, healthContext: healthContextRef.current, ...body },
+          body: { messages, healthContext: healthContextRef.current, profile, ...body },
         }),
       }),
-    [],
+    [profile],
   );
 
   const initialMessages = useMemo(() => toUIMessages(thread.messages), [thread.id]);
@@ -170,7 +174,7 @@ export function ChatWindow({
               transition={{ delay: 0.1 }}
               className="font-serif text-3xl mb-3 bg-clip-text text-transparent bg-gradient-to-r from-white to-white/70"
             >
-              Hi love, I'm Nari.
+              Hi {profile?.name || "love"}, I'm Nari.
             </motion.h3>
 
             <motion.p
@@ -179,34 +183,37 @@ export function ChatWindow({
               transition={{ delay: 0.2 }}
               className="text-sm text-muted-foreground leading-relaxed px-4"
             >
-              Ask me anything — about a symptom that's been on your mind, or what to raise at your
-              next doctor visit.
+              {hasData 
+                ? "Ask me anything — about a symptom that's been on your mind, or what to raise at your next doctor visit." 
+                : "To give you the best advice, I need to understand your body first. Please take the Check-in assessment or log some details in the Tracker."}
             </motion.p>
 
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className="mt-8"
-            >
-              <p className="flex items-center justify-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-accent-gold-soft/80 mb-4">
-                <Sparkles className="h-3 w-3" /> Gentle openings
-              </p>
-              <div className="flex flex-wrap justify-center gap-2">
-                {SUGGESTIONS.map((s, i) => (
-                  <motion.button
-                    key={s}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.5 + i * 0.05 }}
-                    onClick={() => send(s)}
-                    className="rounded-full border border-hairline/50 bg-white/5 backdrop-blur-sm px-4 py-2 text-xs text-foreground/80 transition-all hover:border-accent-gold-soft/50 hover:bg-white/10 hover:text-accent-gold-soft hover:shadow-[0_0_15px_rgba(240,201,137,0.15)]"
-                  >
-                    {s}
-                  </motion.button>
-                ))}
-              </div>
-            </motion.div>
+            {hasData && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+                className="mt-8"
+              >
+                <p className="flex items-center justify-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-accent-gold-soft/80 mb-4">
+                  <Sparkles className="h-3 w-3" /> Gentle openings
+                </p>
+                <div className="flex flex-wrap justify-center gap-2">
+                  {SUGGESTIONS.map((s, i) => (
+                    <motion.button
+                      key={s}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.5 + i * 0.05 }}
+                      onClick={() => send(s)}
+                      className="rounded-full border border-hairline/50 bg-white/5 backdrop-blur-sm px-4 py-2 text-xs text-foreground/80 transition-all hover:border-accent-gold-soft/50 hover:bg-white/10 hover:text-accent-gold-soft hover:shadow-[0_0_15px_rgba(240,201,137,0.15)]"
+                    >
+                      {s}
+                    </motion.button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
           </div>
         )}
 
@@ -292,6 +299,7 @@ export function ChatWindow({
               ref={inputRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
+              disabled={!hasData || isBusy}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
@@ -299,14 +307,14 @@ export function ChatWindow({
                 }
               }}
               rows={1}
-              placeholder="Ask Nari anything about your cycle…"
-              className="w-full resize-none rounded-2xl border border-hairline/50 bg-white/5 px-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 transition-all focus:border-accent-gold-soft/50 focus:bg-white/10 focus:outline-none focus:ring-2 focus:ring-accent-gold-soft/20 scrollbar-hide"
+              placeholder={hasData ? "Ask Nari anything about your cycle…" : "Log data first..."}
+              className="w-full resize-none rounded-2xl border border-hairline/50 bg-white/5 px-4 py-3.5 text-base md:text-sm text-foreground placeholder:text-muted-foreground/60 transition-all focus:border-accent-gold-soft/50 focus:bg-white/10 focus:outline-none focus:ring-2 focus:ring-accent-gold-soft/20 scrollbar-hide disabled:opacity-50 disabled:cursor-not-allowed"
               style={{ maxHeight: 140 }}
             />
           </div>
           <button
             type="submit"
-            disabled={isBusy || !input.trim()}
+            disabled={isBusy || !input.trim() || !hasData}
             className="btn-primary-glow flex h-12 w-12 flex-none items-center justify-center rounded-full disabled:opacity-40 transition-transform active:scale-95"
             aria-label="Send"
           >

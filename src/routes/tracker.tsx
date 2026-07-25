@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { useTracker } from "@/hooks/useTracker";
+import { useProfile } from "@/lib/profile";
 import { Trash2, Plus, CalendarDays } from "lucide-react";
 import { ListSkeleton, CardSkeleton } from "@/components/ui/page-skeleton";
 
@@ -35,6 +36,14 @@ const SYMPTOMS = [
   "acne",
   "breast tenderness",
 ];
+const REMEDIES = [
+  "Hot Water Bag",
+  "Jeera/Ajwain Water",
+  "Haldi Doodh",
+  "Yoga/Stretching",
+  "Fasting (Upvas)",
+  "Rest Day",
+];
 
 function today() {
   const d = new Date();
@@ -43,11 +52,13 @@ function today() {
 
 function TrackerPage() {
   const { entries, add, remove, ready } = useTracker();
+  const { profile } = useProfile();
   const [date, setDate] = useState(today());
   const [flow, setFlow] = useState<(typeof FLOW_OPTIONS)[number]>("light");
   const [pain, setPain] = useState(2);
   const [mood, setMood] = useState<(typeof MOOD_OPTIONS)[number]>("good");
   const [symptoms, setSymptoms] = useState<string[]>([]);
+  const [remedies, setRemedies] = useState<string[]>([]);
   const [note, setNote] = useState("");
 
   const periods = useMemo(() => {
@@ -86,14 +97,18 @@ function TrackerPage() {
   }, [periods]);
 
   const submit = () => {
-    add({ date, flow, pain, mood, symptoms, note: note || undefined });
+    add({ date, flow, pain, mood, symptoms, remedies, note: note || undefined });
     toast.success("Entry saved", { description: `${date} — ${flow} flow, pain ${pain}/10` });
     setNote("");
     setSymptoms([]);
+    setRemedies([]);
   };
 
   const toggleSym = (s: string) =>
     setSymptoms((cur) => (cur.includes(s) ? cur.filter((x) => x !== s) : [...cur, s]));
+
+  const toggleRem = (r: string) =>
+    setRemedies((cur) => (cur.includes(r) ? cur.filter((x) => x !== r) : [...cur, r]));
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-16">
@@ -111,7 +126,7 @@ function TrackerPage() {
           transition={{ delay: 0.1 }}
           className="mt-4 font-serif text-4xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-accent-gold-soft to-accent-rose pb-2"
         >
-          Log today. See tomorrow.
+          {profile?.name ? `Log today. See tomorrow, ${profile.name}.` : "Log today. See tomorrow."}
         </motion.h1>
         <motion.p
           initial={{ opacity: 0 }}
@@ -140,7 +155,7 @@ function TrackerPage() {
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full rounded-xl border border-hairline/50 bg-white/5 px-4 py-3 text-sm focus:border-accent-gold-soft focus:outline-none focus:ring-1 focus:ring-accent-gold-soft transition-all"
+                className="w-full rounded-xl border border-hairline/50 bg-white/5 px-4 py-3 text-base md:text-sm focus:border-accent-gold-soft focus:outline-none focus:ring-1 focus:ring-accent-gold-soft transition-all"
               />
             </div>
             <div>
@@ -220,6 +235,27 @@ function TrackerPage() {
               </div>
             </div>
             <div>
+              <label className="mb-2 block text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                Remedies & Context
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {REMEDIES.map((r) => {
+                  const active = remedies.includes(r);
+                  return (
+                    <motion.button
+                      key={r}
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => toggleRem(r)}
+                      className={`rounded-full border px-4 py-1.5 text-xs transition-colors ${active ? "border-transparent bg-accent-gold-soft text-surface shadow-md shadow-accent-gold-soft/20 font-semibold" : "border-hairline hover:border-accent-gold-soft/50 text-muted-foreground bg-white/5"}`}
+                    >
+                      {r}
+                    </motion.button>
+                  );
+                })}
+              </div>
+            </div>
+            <div>
               <label className="mb-1.5 block text-xs font-semibold uppercase tracking-widest text-muted-foreground">
                 Note (optional)
               </label>
@@ -227,7 +263,7 @@ function TrackerPage() {
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
                 rows={2}
-                className="w-full resize-none rounded-xl border border-hairline/50 bg-white/5 px-4 py-3 text-sm focus:border-accent-gold-soft focus:outline-none focus:ring-1 focus:ring-accent-gold-soft transition-all"
+                className="w-full resize-none rounded-xl border border-hairline/50 bg-white/5 px-4 py-3 text-base md:text-sm focus:border-accent-gold-soft focus:outline-none focus:ring-1 focus:ring-accent-gold-soft transition-all"
                 placeholder="Anything else?"
               />
             </div>
