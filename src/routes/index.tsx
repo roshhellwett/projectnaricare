@@ -1,12 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { CycleWheel } from "@/components/visuals/CycleWheel";
-import {
-  ArrowRight,
-  Sparkles,
-  MessageCircle,
-  ShieldCheck,
-} from "lucide-react";
+import { TodayForYou } from "@/components/home/TodayForYou";
+import { ArrowRight, Sparkles, MessageCircle, ShieldCheck } from "lucide-react";
 import { useProfile } from "@/lib/profile";
 
 export const Route = createFileRoute("/")({
@@ -87,17 +83,20 @@ function Home() {
           style={{ y: heroY }}
           className="mx-auto w-full grid max-w-7xl gap-8 md:gap-14 px-4 sm:px-6 lg:px-8 py-10 sm:py-14 md:py-20 md:grid-cols-[1.1fr_0.9fr] md:items-center"
         >
-          <motion.div initial="hidden" animate="show" variants={fadeUp} className="order-2 md:order-1">
+          <motion.div
+            initial="hidden"
+            animate="show"
+            variants={fadeUp}
+            className="order-2 md:order-1"
+          >
             <motion.div variants={itemFade} className="eyebrow mb-4 sm:mb-6">
               <Sparkles className="h-3 w-3" /> A safe space for every Indian woman
             </motion.div>
 
-            <motion.h1
-              variants={itemFade}
-              className="font-serif text-fluid-hero tracking-tight"
-            >
+            <motion.h1 variants={itemFade} className="font-serif text-fluid-hero tracking-tight">
               Your body has a story, {profile?.name || "Nari"}. <br className="hidden md:block" />
-              Let <em className="italic text-transparent bg-clip-text bg-gradient-to-r from-accent-gold-soft to-accent-rose pb-2 pr-2">
+              Let{" "}
+              <em className="italic text-transparent bg-clip-text bg-gradient-to-r from-accent-gold-soft to-accent-rose pb-2 pr-2">
                 Nari
               </em>{" "}
               help you listen.
@@ -108,13 +107,16 @@ function Home() {
               className="mt-4 sm:mt-6 max-w-xl text-base md:text-lg lg:text-xl text-muted-foreground leading-relaxed"
             >
               Welcome to your safe haven. A quiet, private space free from judgment where you can
-              understand your body, track your cycle, and ask the questions you've always wanted to ask.
-              Think of Nari as your wise older sister — she understands the unique
-              nuances of being an Indian woman, and is always here to listen and answer with warmth,
-              love, and absolute privacy.
+              understand your body, track your cycle, and ask the questions you've always wanted to
+              ask. Think of Nari as your wise older sister — she understands the unique nuances of
+              being an Indian woman, and is always here to listen and answer with warmth, love, and
+              absolute privacy.
             </motion.p>
 
-            <motion.div variants={itemFade} className="mt-6 sm:mt-10 flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4">
+            <motion.div
+              variants={itemFade}
+              className="mt-6 sm:mt-10 flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4"
+            >
               <Link
                 to="/assessment"
                 className="btn-primary-glow group inline-flex w-full sm:w-auto items-center justify-center gap-2 sm:gap-3 rounded-full px-6 py-3.5 sm:px-8 sm:py-4 text-sm sm:text-base font-semibold min-h-[48px]"
@@ -143,7 +145,6 @@ function Home() {
               <span className="text-accent-gold-soft/30">·</span>
               <span>Private</span>
             </motion.p>
-
           </motion.div>
 
           <motion.div
@@ -160,8 +161,9 @@ function Home() {
         </motion.div>
       </section>
 
-
-
+      <section className="content-auto relative z-10 pb-12 sm:pb-16 md:pb-20">
+        <TodayForYou />
+      </section>
     </div>
   );
 }

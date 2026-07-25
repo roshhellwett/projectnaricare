@@ -111,7 +111,6 @@
     font-size: 15px;
     min-width: 320px;
     min-height: 100dvh;
-    overscroll-behavior-y: none;
     -webkit-tap-highlight-color: transparent;
   }
 
@@ -140,10 +139,7 @@
   }
 
   button,
-  a,
-  input,
-  select,
-  textarea {
+  a {
     touch-action: manipulation;
   }
 
