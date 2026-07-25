@@ -12,17 +12,17 @@ import { useProfile } from "@/lib/profile";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "NariCare — A gentle AI health companion for every Nari" },
+      { title: "NariCare — Har Nari Ki Saheli" },
       {
         name: "description",
         content:
-          "Understand your cycle, track your body, and talk to Nari — a warm AI companion trained on women's health. Private, personal, and always by your side.",
+          "Understand your cycle, track your health, and talk to Nari — your own Saheli for women's health. 100% private, personal, and always by your side, just like a true saheli.",
       },
-      { property: "og:title", content: "NariCare — A gentle AI health companion for every Nari" },
+      { property: "og:title", content: "NariCare — Har Nari Ki Saheli" },
       {
         property: "og:description",
         content:
-          "Understand your cycle, track your body, and talk to Nari — private, personal, and always by your side.",
+          "Understand your cycle, track your health, and talk to Nari — your own Saheli for women's health. 100% private, personal, and always by your side, just like a true saheli.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -107,10 +107,10 @@ function Home() {
               variants={itemFade}
               className="mt-8 max-w-xl text-lg md:text-xl text-muted-foreground leading-relaxed"
             >
-              Welcome to your safe haven. A quiet, private space free from judgment where you can 
-              understand your body, track your cycle, and ask the questions you've always wanted to ask. 
-              Think of Nari as your wise older sister — she understands the unique 
-              nuances of being an Indian woman, and is always here to listen and answer with warmth, 
+              Welcome to your safe haven. A quiet, private space free from judgment where you can
+              understand your body, track your cycle, and ask the questions you've always wanted to ask.
+              Think of Nari as your wise older sister — she understands the unique
+              nuances of being an Indian woman, and is always here to listen and answer with warmth,
               love, and absolute privacy.
             </motion.p>
 
