@@ -8,6 +8,8 @@ import { toast } from "sonner";
 import { useProfile } from "@/lib/profile";
 import { DoctorSkeleton, PageHeaderSkeleton } from "@/components/ui/page-skeleton";
 import { useState, useMemo, useEffect } from "react";
+import { formatDateTimeIN, formatDateIN } from "@/lib/datetime";
+
 
 export const Route = createFileRoute("/doctor")({
   head: () => ({
@@ -114,7 +116,7 @@ function DoctorPrintView({ tests, questions }: { tests: RecommendationItem[], qu
   const recentAssessments = allAssessments.slice(0, 3);
   
   if (recentAssessments.length === 0) return null;
-  const date = new Date().toLocaleDateString();
+  const date = formatDateTimeIN(Date.now());
 
   return (
     <div className="hidden print:flex flex-col w-full bg-white text-black font-sans">
@@ -162,7 +164,7 @@ function DoctorPrintView({ tests, questions }: { tests: RecommendationItem[], qu
 
       {/* PAGES 2, 3, 4: ASSESSMENT RAW SCORES */}
       {recentAssessments.map((a, idx) => {
-        const assessmentDate = new Date(a.savedAt).toLocaleDateString();
+        const assessmentDate = formatDateIN(a.savedAt);
         return (
           <div key={a.savedAt} className="min-h-[100dvh] p-6 flex flex-col break-before-page">
              <div className="border-b-2 border-black pb-3 mb-5">

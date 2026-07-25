@@ -8,6 +8,8 @@ import { RiskBloom } from "@/components/visuals/RiskBloom";
 import { ListSkeleton } from "@/components/ui/page-skeleton";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { useProfile } from "@/lib/profile";
+import { formatDateIN, formatDateShortIN } from "@/lib/datetime";
+
 
 export const Route = createFileRoute("/history")({
   head: () => ({
@@ -79,7 +81,7 @@ function HistoryPage() {
   const graphData = useMemo(() => {
     // Sort chronologically for the graph
     return [...assessments].sort((a, b) => a.savedAt - b.savedAt).map(a => {
-      const date = new Date(a.savedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+      const date = formatDateShortIN(a.savedAt);
       return {
         date,
         dysmenorrhea: a.scores.dysmenorrhea,
@@ -223,12 +225,8 @@ function HistoryPage() {
       {/* History List */}
       <div className="space-y-4">
         {assessments.map((a, i) => {
-          const date = new Date(a.savedAt).toLocaleDateString("en-US", {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          });
+          const date = formatDateIN(a.savedAt);
+
           const overallAvg =
             (a.scores.irregularity +
               a.scores.pcos +

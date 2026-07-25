@@ -7,10 +7,7 @@ import { RestockPredictor } from "./RestockPredictor";
 import { useAssessment } from "@/hooks/useAssessment";
 import { useTracker } from "@/hooks/useTracker";
 import { CATEGORIES, levelOf } from "@/lib/health/scoring";
-
-function daysBetween(a: Date, b: Date) {
-  return Math.round((a.getTime() - b.getTime()) / 86400000);
-}
+import { addDaysIST, daysBetweenIST, todayIST } from "@/lib/datetime";
 
 function useNextPeriod() {
   const { entries } = useTracker();
@@ -29,33 +26,28 @@ function useNextPeriod() {
         groups.push([d]);
         continue;
       }
-      const diff = (new Date(d).getTime() - new Date(last[last.length - 1]).getTime()) / 86400000;
+      const diff = daysBetweenIST(d, last[last.length - 1]);
       if (diff <= 2) last.push(d);
       else groups.push([d]);
     }
-    const starts = groups.map((g) => new Date(g[0]));
-    let avg = 28; // global fallback
+    const starts = groups.map((g) => g[0]);
+    let avg = 28;
     if (starts.length < 2) {
-      if (assessment?.raw?.cycleLength) {
-        avg = assessment.raw.cycleLength;
-      }
+      if (assessment?.raw?.cycleLength) avg = assessment.raw.cycleLength;
     } else {
       const gaps: number[] = [];
       for (let i = 1; i < starts.length; i++) {
-        gaps.push(daysBetween(starts[i], starts[i - 1]));
+        gaps.push(daysBetweenIST(starts[i], starts[i - 1]));
       }
       avg = Math.round(gaps.reduce((a, b) => a + b, 0) / gaps.length);
     }
-    
-    const next = new Date(starts[starts.length - 1].getTime() + avg * 86400000);
-    const diff = daysBetween(next, new Date());
-    return {
-      nextDate: next.toISOString().slice(0, 10),
-      inDays: diff,
-      avg,
-    };
+
+    const nextDate = addDaysIST(starts[starts.length - 1], avg);
+    const inDays = daysBetweenIST(nextDate, todayIST());
+    return { nextDate, inDays, avg };
   }, [entries, assessment]);
 }
+
 
 export function TodayForYou() {
   const { assessment, ready: aReady } = useAssessment();
@@ -97,13 +89,11 @@ export function TodayForYou() {
             icon={<CalendarHeart className="h-4 w-4" />}
             title="Your cycle"
             body={
-              nextPeriod?.inDays !== undefined
+              nextPeriod
                 ? nextPeriod.inDays >= 0
                   ? `Next period expected in ~${nextPeriod.inDays} day${nextPeriod.inDays === 1 ? "" : "s"} (${nextPeriod.avg}-day cycle average).`
                   : `You're ${Math.abs(nextPeriod.inDays)} day${Math.abs(nextPeriod.inDays) === 1 ? "" : "s"} past the expected date — log today to keep the rhythm.`
-                : nextPeriod?.lastLog
-                  ? "Log another period start so Nari can learn your rhythm."
-                  : "Log your first period to start seeing gentle predictions."
+                : "Log your first period in the tracker so Nari can start predicting your rhythm."
             }
             cta="Open tracker"
             to="/tracker"

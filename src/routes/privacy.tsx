@@ -1,8 +1,58 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
+import { storage } from "@/lib/storage";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/privacy")({
+  head: () => ({
+    meta: [
+      { title: "Your Privacy · NariCare" },
+      { name: "description", content: "Your NariCare health data lives only on your device. Learn how we protect your privacy and wipe your data anytime." },
+      { property: "og:title", content: "Your Privacy · NariCare" },
+      { property: "og:description", content: "Local-first, zero-tracking women's health hub." },
+      { property: "og:type", content: "website" },
+    ],
+    links: [{ rel: "canonical", href: "/privacy" }],
+  }),
   component: PrivacyPolicy,
 });
+
+function EraseAllButton() {
+  const [confirming, setConfirming] = useState(false);
+  if (!confirming) {
+    return (
+      <button
+        onClick={() => setConfirming(true)}
+        className="mt-4 rounded-xl border border-accent-rose/30 bg-accent-rose/5 px-4 py-2 text-sm text-accent-rose hover:bg-accent-rose/15 transition-colors"
+      >
+        Erase all my data
+      </button>
+    );
+  }
+  return (
+    <div className="mt-4 flex flex-wrap items-center gap-3">
+      <span className="text-sm text-foreground/80">This can't be undone. Sure?</span>
+      <button
+        onClick={() => {
+          storage.clearAll();
+          toast.success("All local data has been erased.");
+          setTimeout(() => window.location.reload(), 600);
+        }}
+        className="rounded-xl bg-accent-rose px-4 py-2 text-sm text-white hover:bg-accent-rose/90"
+      >
+        Yes, erase everything
+      </button>
+      <button
+        onClick={() => setConfirming(false)}
+        className="rounded-xl border border-foreground/20 px-4 py-2 text-sm text-foreground/80 hover:bg-foreground/5"
+      >
+        Cancel
+      </button>
+    </div>
+  );
+}
+
+
 
 function PrivacyPolicy() {
   return (
@@ -52,11 +102,12 @@ function PrivacyPolicy() {
             <span className="text-xl">🧹</span> You are in control
           </h2>
           <p className="text-muted-foreground">
-            Because you hold all your data, you hold all the power. You can completely wipe your 
-            history at any time by clicking "Manage Data &gt; Clear all history &amp; data" at the bottom of the page, 
-            or by simply clearing your browser's data. 
+            Because you hold all your data, you hold all the power. You can wipe every assessment,
+            tracker entry, and chat thread from this device with one tap.
           </p>
+          <EraseAllButton />
         </section>
+
       </div>
 
       <div className="mt-12 text-center">

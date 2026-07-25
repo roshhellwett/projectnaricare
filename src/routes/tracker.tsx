@@ -6,6 +6,7 @@ import { useTracker } from "@/hooks/useTracker";
 import { useProfile } from "@/lib/profile";
 import { Trash2, Plus, CalendarDays } from "lucide-react";
 import { ListSkeleton, CardSkeleton } from "@/components/ui/page-skeleton";
+import { CycleCalendar } from "@/components/tracker/CycleCalendar";
 
 export const Route = createFileRoute("/tracker")({
   head: () => ({
@@ -45,15 +46,13 @@ const REMEDIES = [
   "Rest Day",
 ];
 
-function today() {
-  const d = new Date();
-  return d.toISOString().slice(0, 10);
-}
+import { todayIST, daysBetweenIST, addDaysIST } from "@/lib/datetime";
+
 
 function TrackerPage() {
   const { entries, add, remove, ready } = useTracker();
   const { profile } = useProfile();
-  const [date, setDate] = useState(today());
+  const [date, setDate] = useState(todayIST());
   const [flow, setFlow] = useState<(typeof FLOW_OPTIONS)[number]>("light");
   const [pain, setPain] = useState(2);
   const [mood, setMood] = useState<(typeof MOOD_OPTIONS)[number]>("good");
@@ -74,9 +73,7 @@ function TrackerPage() {
         groups.push([d]);
         continue;
       }
-      const prev = new Date(last[last.length - 1]);
-      const cur = new Date(d);
-      const diff = (cur.getTime() - prev.getTime()) / 86400000;
+      const diff = daysBetweenIST(d, last[last.length - 1]);
       if (diff <= 2) last.push(d);
       else groups.push([d]);
     }
@@ -85,28 +82,22 @@ function TrackerPage() {
 
   const nextPeriod = useMemo(() => {
     if (periods.length < 2) return null;
-    const starts = periods.map((g) => new Date(g[0]));
+    const starts = periods.map((g) => g[0]);
     const allGaps: number[] = [];
     for (let i = 1; i < starts.length; i++) {
-      allGaps.push((starts[i].getTime() - starts[i - 1].getTime()) / 86400000);
+      allGaps.push(daysBetweenIST(starts[i], starts[i - 1]));
     }
-    
-    // Trim extreme clinical outliers (e.g., missed periods, anovulatory cycles)
-    const validGaps = allGaps.filter(g => g >= 15 && g <= 50);
-    
-    // Fallback to all gaps if everything was an outlier (rare)
+    const validGaps = allGaps.filter((g) => g >= 15 && g <= 50);
     const gapsToUse = validGaps.length > 0 ? validGaps : allGaps;
-    
-    // Calculate Median instead of Mean to prevent a single weird month from skewing the prediction forever
     gapsToUse.sort((a, b) => a - b);
     const mid = Math.floor(gapsToUse.length / 2);
-    const median = gapsToUse.length % 2 !== 0 
-      ? gapsToUse[mid] 
-      : (gapsToUse[mid - 1] + gapsToUse[mid]) / 2;
-      
-    const last = starts[starts.length - 1];
-    const next = new Date(last.getTime() + median * 86400000);
-    return { date: next.toISOString().slice(0, 10), avg: Math.round(median) };
+    const median =
+      gapsToUse.length % 2 !== 0
+        ? gapsToUse[mid]
+        : (gapsToUse[mid - 1] + gapsToUse[mid]) / 2;
+    const nextDate = addDaysIST(starts[starts.length - 1], Math.round(median));
+    return { date: nextDate, avg: Math.round(median) };
+
   }, [periods]);
 
   const submit = () => {
@@ -319,6 +310,8 @@ function TrackerPage() {
               </p>
             </motion.div>
           </div>
+
+          <CycleCalendar entries={entries} predictedDate={nextPeriod?.date} />
 
           <div className="glass-card p-6 flex flex-col flex-1 overflow-hidden">
             <h3 className="font-serif text-lg">Recent entries</h3>

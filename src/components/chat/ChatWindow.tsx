@@ -46,13 +46,32 @@ function renderMarkdownLite(text: string) {
   return `<p>${html}</p>`;
 }
 
-const SUGGESTIONS = [
+const DEFAULT_SUGGESTIONS = [
   "Explain my latest scores to me",
   "Is this much pain normal?",
   "Which blood tests should I ask my doctor for?",
   "Could my symptoms point to PCOS?",
   "Gentle remedies to ease my cramps tonight?",
 ];
+
+// Red-flag phrases (English + Hinglish + Hindi-in-Latin) that trigger a
+// doctor-visit safety banner in the transcript.
+const RED_FLAG_PATTERNS = [
+  /\b(soak(ing)?|flooding)\b.*\b(pad|tampon)\b/i,
+  /bleed(ing)? (through|heavily|a lot)/i,
+  /bahut zyada khoon|bahut khoon|bleeding bahut/i,
+  /\bfaint(ing|ed)?\b|\bdizzy\b|behosh|chakkar/i,
+  /suicid|self.?harm|end my life|jaan dena|khudkushi/i,
+  /severe (pain|cramp)|unbearable pain|bardaasht nahi/i,
+  /chest pain|shortness of breath|can'?t breathe|saans nahi|chest mein dard/i,
+  /pregnan(t|cy).*(bleed|pain)|pregnant hoon.*(bleed|dard)/i,
+];
+
+function hasRedFlag(text: string) {
+  return RED_FLAG_PATTERNS.some((r) => r.test(text));
+}
+
+
 
 export function ChatWindow({
   thread,
@@ -79,6 +98,29 @@ export function ChatWindow({
   
   const { profile } = useProfile();
   const hasData = assessments.length > 0 || entries.length > 0;
+
+  // Personalized opening prompts based on real data.
+  const suggestions = useMemo<string[]>(() => {
+    const list: string[] = [];
+    const latest = assessments[0];
+    if (latest) {
+      const scoreEntries = Object.entries(latest.scores) as [string, number][];
+      const top = scoreEntries.sort((a, b) => b[1] - a[1])[0];
+      if (top) list.push(`What does my ${top[0]} signal mean for me?`);
+    }
+    const recentSymptoms = new Set<string>();
+    entries.slice(-10).forEach((e) => e.symptoms.forEach((s) => recentSymptoms.add(s)));
+    if (recentSymptoms.has("cramps")) list.push("Gentle remedies to ease my cramps tonight?");
+    if (recentSymptoms.has("fatigue")) list.push("Why am I so tired around my period?");
+    if (recentSymptoms.has("acne")) list.push("Is my cycle causing these breakouts?");
+    for (const s of DEFAULT_SUGGESTIONS) {
+      if (list.length >= 4) break;
+      if (!list.includes(s)) list.push(s);
+    }
+    return list.slice(0, 4);
+  }, [assessments, entries]);
+
+
 
   const healthContextRef = useRef(healthContext);
   useEffect(() => {
@@ -108,6 +150,16 @@ export function ChatWindow({
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const lastCountRef = useRef(-1);
+
+  const showRedFlagBanner = useMemo(
+    () =>
+      messages.some(
+        (m) =>
+          m.role === "user" &&
+          hasRedFlag(m.parts.map((p) => (p.type === "text" ? p.text : "")).join("")),
+      ),
+    [messages],
+  );
 
   useEffect(() => {
     if (lastCountRef.current === messages.length && status !== "streaming") return;
@@ -199,7 +251,7 @@ export function ChatWindow({
                   <Sparkles className="h-3 w-3" /> Gentle openings
                 </p>
                 <div className="flex flex-wrap justify-center gap-2">
-                  {SUGGESTIONS.map((s, i) => (
+                  {suggestions.map((s: string, i: number) => (
                     <motion.button
                       key={s}
                       initial={{ opacity: 0, scale: 0.9 }}
@@ -242,6 +294,24 @@ export function ChatWindow({
             );
           })}
         </AnimatePresence>
+
+        {showRedFlagBanner && (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mx-auto max-w-lg rounded-2xl border border-destructive/40 bg-destructive/10 px-5 py-4 text-sm text-foreground/95 shadow-lg shadow-destructive/10"
+            role="alert"
+          >
+            <p className="font-serif text-base text-destructive mb-1">Please see a doctor soon</p>
+            <p className="text-xs leading-relaxed text-muted-foreground">
+              Some of what you mentioned can be a sign that needs in-person care. Nari can share
+              gentle guidance, but please contact a doctor, gynaecologist, or nearby clinic — or in
+              India, call the women's helpline <strong className="text-foreground">1091</strong> or
+              emergency <strong className="text-foreground">112</strong>.
+            </p>
+          </motion.div>
+        )}
+
 
         {status === "submitted" && (
           <motion.div

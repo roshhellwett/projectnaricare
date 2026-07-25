@@ -88,12 +88,16 @@ export type ChatThread = {
   messages: ThreadMessage[];
 };
 
+export const STORAGE_VERSION = 1;
+
 export const KEYS = {
+  version: "naricare:v",
   assessment: "naricare:assessment",
   tracker: "naricare:tracker",
   threads: "naricare:threads",
   quickThreadId: "naricare:quick-thread-id",
 } as const;
+
 
 function isBrowser() {
   return typeof window !== "undefined";

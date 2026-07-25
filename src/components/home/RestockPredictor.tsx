@@ -26,10 +26,12 @@ export function useRestockPredictor(nextPeriodInDays: number | undefined) {
     }
 
     // Simple heuristic: just look at all symptoms logged in the last 60 days
-    const last60Days = new Date();
-    last60Days.setDate(last60Days.getDate() - 60);
-    
-    const recentEntries = entries.filter(e => new Date(e.date) >= last60Days);
+    const cutoffMs = Date.now() - 60 * 86400000;
+    const recentEntries = entries.filter((e) => {
+      const [y, m, d] = e.date.split("-").map(Number);
+      return Date.UTC(y, (m ?? 1) - 1, d ?? 1, -5, -30) >= cutoffMs;
+    });
+
     const symptomCounts: Record<string, number> = {};
     
     let heavyFlowCount = 0;
