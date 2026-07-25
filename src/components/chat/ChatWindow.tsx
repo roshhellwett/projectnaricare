@@ -135,7 +135,7 @@ export function ChatWindow({
   };
 
   return (
-    <div className={`relative flex flex-col overflow-hidden ${compact ? "h-[520px]" : "h-full"}`}>
+    <div className={`relative flex flex-col overflow-hidden ${compact ? "h-[420px] sm:h-[520px]" : "h-full"}`}>
       {/* Animated gradient background specifically for the chat area */}
       <div className="absolute inset-0 bg-gradient-to-br from-black/20 via-transparent to-black/20 pointer-events-none" />
       <motion.div
@@ -260,10 +260,13 @@ export function ChatWindow({
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mx-auto max-w-md rounded-2xl border border-high/40 bg-high/10 p-5 text-center"
+            className="mx-auto max-w-md rounded-2xl border border-accent-rose/40 bg-gradient-to-br from-accent-rose/10 to-transparent p-5 text-center shadow-lg shadow-accent-rose/5"
           >
-            <p className="text-sm text-foreground/90 mb-3">
-              Nari stumbled. {error.message || "Something went wrong with the response."}
+            <h4 className="font-serif text-lg text-accent-rose mb-1">Nari is resting right now</h4>
+            <p className="text-sm text-muted-foreground mb-4">
+              {error.message?.includes("GROQ_API_KEY") || error.message?.includes("503")
+                ? "My AI engine is currently offline. Please ask the developer to check the API configuration (zenithprojects@icloud.com)."
+                : "I stumbled a bit while thinking. Let's try that again."}
             </p>
             <button
               onClick={() => {
@@ -278,7 +281,7 @@ export function ChatWindow({
                   sendMessage({ text });
                 }
               }}
-              className="btn-primary-glow inline-flex items-center gap-2 rounded-full px-5 py-2 text-xs font-semibold"
+              className="btn-primary-glow inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-xs font-semibold shadow-md shadow-accent-gold-soft/20"
             >
               Try again
             </button>

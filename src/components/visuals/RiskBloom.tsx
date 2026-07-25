@@ -37,7 +37,7 @@ export function RiskBloom({ scores, size = 340 }: { scores: AssessmentScores; si
   });
 
   return (
-    <svg width={size} height={size} viewBox="0 0 320 320">
+    <svg width="100%" height="auto" viewBox="0 0 320 320" className="aspect-square">
       {[minR, (minR + maxR) / 2, maxR].map((r) => (
         <circle key={r} cx={cx} cy={cy} r={r} fill="none" stroke="rgba(246,237,232,0.08)" />
       ))}

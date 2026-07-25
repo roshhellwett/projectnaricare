@@ -25,7 +25,7 @@ export function BottomNav() {
             key={item.to}
             to={item.to}
             className={cn(
-              "flex flex-1 flex-col items-center justify-center gap-1 rounded-xl py-2 text-xs transition-colors",
+              "flex flex-1 flex-col items-center justify-center gap-1 rounded-xl py-2.5 min-h-[48px] text-xs transition-colors",
               isActive ? "text-accent-gold-soft font-medium" : "text-muted-foreground hover:text-foreground"
             )}
           >

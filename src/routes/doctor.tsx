@@ -308,7 +308,7 @@ function DoctorPage() {
 
   if (!ready && !a) {
     return (
-      <div className="mx-auto max-w-4xl px-6 py-16 print:hidden">
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 py-10 md:py-16 print:hidden">
         <PageHeaderSkeleton />
         <div className="mt-12">
           <DoctorSkeleton />
@@ -319,7 +319,7 @@ function DoctorPage() {
 
   if (ready && !a) {
     return (
-      <div className="mx-auto max-w-4xl px-6 py-16 print:hidden">
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 py-10 md:py-16 print:hidden">
         <motion.div 
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -346,7 +346,7 @@ function DoctorPage() {
 
   return (
     <>
-      <div className="mx-auto max-w-4xl px-6 py-16 print:hidden">
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 py-10 md:py-16 print:hidden">
         
         {/* Pre-Analysis Banner */}
         {status === 'idle' && (
@@ -385,7 +385,7 @@ function DoctorPage() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.5 }}
-                className="font-serif text-2xl text-accent-gold-soft max-w-xl"
+                className="font-serif text-xl sm:text-2xl text-accent-gold-soft max-w-xl"
               >
                 {LOADING_PHRASES[loadingIndex]}
               </motion.p>

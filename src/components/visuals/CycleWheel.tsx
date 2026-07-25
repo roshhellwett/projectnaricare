@@ -2,14 +2,20 @@ import { motion, useReducedMotion } from "framer-motion";
 import flowerUrl from "@/assets/flower.png";
 
 import { useMouseTilt } from "@/hooks/useMouseTilt";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 /**
  * Static gerbera daisy hero visual with gentle idle sway,
  * mouse-driven parallax tilt, and orbiting golden pollen.
+ * Now responsive — shows a smaller version on mobile.
  */
-export function CycleWheel({ size = 780 }: { size?: number }) {
+export function CycleWheel() {
   const reduce = useReducedMotion();
+  const isMobile = useIsMobile();
   const { rx, ry } = useMouseTilt(4);
+
+  // Responsive size: 280px on mobile, 480px on tablets, 780px on desktop
+  const size = isMobile ? 280 : 780;
 
   const orbits = [
     { r: size * 0.46, dur: 26, delay: 0, dot: 6 },
@@ -20,7 +26,7 @@ export function CycleWheel({ size = 780 }: { size?: number }) {
 
   return (
     <div
-      className="relative hidden items-center justify-center md:flex"
+      className="relative flex items-center justify-center"
       style={{ width: size, height: size, perspective: 1200 }}
     >
       {/* Soft aurora halo */}
@@ -36,8 +42,9 @@ export function CycleWheel({ size = 780 }: { size?: number }) {
         transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
       />
 
-      {/* Orbiting pollen dots */}
+      {/* Orbiting pollen dots — skip on mobile for perf */}
       {!reduce &&
+        !isMobile &&
         orbits.map((o, i) => (
           <motion.div
             key={i}

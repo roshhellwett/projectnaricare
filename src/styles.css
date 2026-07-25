@@ -357,6 +357,18 @@
   .nav-link.is-active::after {
     transform: scaleX(1);
   }
+
+  /* Fluid hero heading — scales smoothly from 375px to 1440px */
+  .text-fluid-hero {
+    font-size: clamp(1.875rem, 1rem + 4vw, 4.5rem);
+    line-height: 1.05;
+  }
+
+  /* Minimum tap target — 44×44px per WCAG / Apple HIG */
+  .tap-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
 }
 
 @media print {

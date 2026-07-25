@@ -8,7 +8,7 @@ function TermsOfService() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
       <div className="mb-12 text-center">
-        <h1 className="font-serif text-4xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-accent-gold-soft to-accent-rose pb-2">
+        <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-accent-gold-soft to-accent-rose pb-2">
           House Rules
         </h1>
         <p className="mt-3 text-muted-foreground">Terms of Service</p>

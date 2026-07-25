@@ -1,9 +1,9 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useState } from "react";
 import { useThreads } from "@/hooks/useThreads";
 import { ChatWindow } from "@/components/chat/ChatWindow";
 import { ChatLockdown } from "@/components/chat/ChatLockdown";
-import { Plus, MessageSquare, Trash2 } from "lucide-react";
+import { Plus, MessageSquare, Trash2, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import type { ThreadMessage } from "@/lib/storage";
 import { storage } from "@/lib/storage";
 
@@ -25,6 +25,7 @@ function AskThread() {
   const { threadId } = Route.useParams();
   const { threads, ready, create, remove, setMessages } = useThreads();
   const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const thread = useMemo(
     () =>
@@ -48,6 +49,7 @@ function AskThread() {
   const newThread = () => {
     const t = create();
     navigate({ to: "/ask/$threadId", params: { threadId: t.id } });
+    setSidebarOpen(false);
   };
 
   const deleteThread = (id: string) => {
@@ -67,18 +69,38 @@ function AskThread() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 md:px-6 md:py-12">
-      <div className="mb-8 text-center">
+    <div className="mx-auto max-w-6xl px-4 py-6 md:px-6 md:py-12">
+      <div className="mb-6 md:mb-8 text-center">
         <div className="eyebrow justify-center">Ask Nari</div>
-        <h1 className="mt-3 font-serif text-3xl md:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-accent-gold-soft to-accent-rose pb-1">
+        <h1 className="mt-3 font-serif text-2xl sm:text-3xl md:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-accent-gold-soft to-accent-rose pb-1">
           Your private AI health companion
         </h1>
       </div>
 
+      {/* Mobile sidebar toggle */}
+      <div className="flex items-center gap-2 mb-4 md:hidden">
+        <button
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className="tap-target inline-flex items-center gap-2 rounded-xl border border-hairline/30 bg-white/5 px-3 py-2 text-sm text-muted-foreground transition hover:bg-white/10 hover:text-foreground"
+        >
+          {sidebarOpen ? (
+            <><PanelLeftClose className="h-4 w-4" /> Hide chats</>
+          ) : (
+            <><PanelLeftOpen className="h-4 w-4" /> My chats ({threads.length})</>
+          )}
+        </button>
+        <button
+          onClick={newThread}
+          className="tap-target inline-flex items-center gap-2 rounded-xl border border-hairline/30 bg-white/5 px-3 py-2 text-sm text-muted-foreground transition hover:bg-white/10 hover:text-foreground"
+        >
+          <Plus className="h-4 w-4" /> New
+        </button>
+      </div>
+
       <div className="grid gap-4 md:grid-cols-[260px_1fr]">
-        {/* Sidebar */}
-        <aside className="glass-card flex flex-col overflow-hidden md:h-[640px]">
-          <div className="border-b border-hairline/50 p-4 bg-black/10">
+        {/* Sidebar — collapsible on mobile, always visible on md+ */}
+        <aside className={`glass-card flex flex-col overflow-hidden md:h-[640px] ${sidebarOpen ? "max-h-[300px]" : "hidden md:flex"}`}>
+          <div className="border-b border-hairline/50 p-4 bg-black/10 hidden md:block">
             <button
               onClick={newThread}
               className="btn-primary-glow flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition-transform active:scale-95"
@@ -100,6 +122,7 @@ function AskThread() {
                       <Link
                         to="/ask/$threadId"
                         params={{ threadId: t.id }}
+                        onClick={() => setSidebarOpen(false)}
                         className="flex min-w-0 flex-1 items-center gap-3 text-left text-sm"
                       >
                         <div
@@ -129,7 +152,7 @@ function AskThread() {
         </aside>
 
         {/* Chat */}
-        <div className="glass-card overflow-hidden md:h-[640px]">
+        <div className="glass-card overflow-hidden h-[calc(100dvh-16rem)] sm:h-[calc(100dvh-14rem)] md:h-[640px]">
           <ChatWindow key={thread.id} thread={thread} onMessagesChanged={handleMessages} />
         </div>
       </div>

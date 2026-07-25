@@ -11,7 +11,7 @@ export function FloatingChat() {
   const { assessments } = useAssessment();
   const { entries } = useTracker();
   
-  const hasData = assessments.length > 0 || entries.length > 0;
+  const hasData = assessments.length > 0;
 
   const [open, setOpen] = useState(false);
   const location = useLocation();
@@ -24,7 +24,7 @@ export function FloatingChat() {
   let greeting = `Hi ${nameStr}! How are you feeling today?`;
   
   if (!hasData) {
-    greeting = `Hey ${nameStr}! To give you the best advice, I need to understand your body first. Could you please take the Check-in assessment or log some details in the Tracker?`;
+    greeting = `Hi ${nameStr}! To give you safe and personalized advice, I need a baseline understanding of your cycle. Please take the Check-in assessment first!`;
   } else if (location.pathname === "/tracker") {
     greeting = `Logging your cycle, ${nameStr}? Let me know if you need help understanding any symptoms.`;
   } else if (location.pathname === "/history") {
@@ -107,7 +107,7 @@ export function FloatingChat() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="glass-panel fixed bottom-[calc(env(safe-area-inset-bottom,0)+10rem)] md:bottom-[calc(env(safe-area-inset-bottom,0)+5.5rem)] right-4 md:right-6 z-50 w-[340px] max-w-[calc(100vw-2rem)] overflow-hidden"
+            className="glass-panel fixed bottom-[calc(env(safe-area-inset-bottom,0)+10rem)] md:bottom-[calc(env(safe-area-inset-bottom,0)+5.5rem)] right-3 md:right-6 z-50 w-[calc(100vw-1.5rem)] sm:w-[360px] max-w-[400px] overflow-hidden"
           >
             <div className="flex items-center justify-between border-b border-hairline/50 bg-gradient-to-r from-accent-rose/20 to-accent-gold/20 px-4 py-3">
               <div className="flex items-center gap-2">
@@ -141,12 +141,6 @@ export function FloatingChat() {
                      <div>
                        <div className="text-sm font-medium text-accent-gold-soft">Take Assessment</div>
                        <div className="text-xs text-muted-foreground mt-0.5">Let me understand your cycle</div>
-                     </div>
-                  </Link>
-                  <Link to="/tracker" onClick={() => setOpen(false)} className="flex items-center gap-3 w-full p-3 rounded-xl bg-white/5 hover:bg-white/10 transition border border-hairline/50 text-left group">
-                     <div>
-                       <div className="text-sm font-medium">Log Tracker</div>
-                       <div className="text-xs text-muted-foreground mt-0.5">Record your symptoms</div>
                      </div>
                   </Link>
                 </div>

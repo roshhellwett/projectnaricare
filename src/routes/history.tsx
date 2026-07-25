@@ -126,7 +126,7 @@ function HistoryPage() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl px-6 py-16">
+    <div className="mx-auto max-w-4xl px-4 sm:px-6 py-10 md:py-16">
       <div className="text-center mb-12">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -139,7 +139,7 @@ function HistoryPage() {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="mt-4 font-serif text-4xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-accent-gold-soft to-accent-rose pb-2"
+          className="mt-4 font-serif text-3xl sm:text-4xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-accent-gold-soft to-accent-rose pb-2"
         >
           {profile?.name ? `${profile.name}'s Health Timeline` : "Assessment History"}
         </motion.h1>
@@ -182,7 +182,7 @@ function HistoryPage() {
             </div>
           </div>
 
-          <div className="h-[300px] w-full mt-4">
+          <div className="h-[220px] sm:h-[300px] w-full mt-4">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={graphData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />

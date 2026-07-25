@@ -173,7 +173,7 @@ function AssessmentPage() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-6 py-16 overflow-x-hidden">
+    <div className="mx-auto max-w-3xl px-4 sm:px-6 py-10 md:py-16 overflow-x-hidden">
       <div className="text-center">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -186,7 +186,7 @@ function AssessmentPage() {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="mt-4 font-serif text-4xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-accent-gold-soft to-accent-rose pb-2"
+          className="mt-4 font-serif text-3xl sm:text-4xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-accent-gold-soft to-accent-rose pb-2"
         >
           {profile?.name ? `Hi ${profile.name}, tell us about your last few cycles.` : "Tell us about your last few cycles."}
         </motion.h1>
@@ -200,7 +200,7 @@ function AssessmentPage() {
         </motion.p>
       </div>
 
-      <div className="mt-12 glass-panel p-6 md:p-10 relative">
+      <div className="mt-8 md:mt-12 glass-panel p-4 sm:p-6 md:p-10 relative">
         <div className="h-1 overflow-hidden rounded-full bg-surface-light">
           <motion.div
             className="h-full bg-gradient-to-r from-accent-gold to-accent-rose"
@@ -288,7 +288,7 @@ function Choices<T extends string | number>({
   onChange: (v: T) => void;
 }) {
   return (
-    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-2 sm:gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {options.map((o) => {
         const selected = value === o.value;
         return (
@@ -298,7 +298,7 @@ function Choices<T extends string | number>({
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
             onClick={() => onChange(o.value)}
-            className={`relative rounded-2xl border px-4 py-4 text-sm transition-colors ${
+            className={`relative rounded-2xl border px-4 py-3.5 text-sm transition-colors min-h-[44px] ${
               selected
                 ? "border-transparent bg-gradient-to-br from-primary to-[#a8446a] font-semibold text-white shadow-lg shadow-primary/30"
                 : "border-hairline/50 bg-white/5 hover:bg-white/10 text-muted-foreground"
@@ -723,7 +723,7 @@ function Results({ saved, onRetake }: { saved: SavedAssessment; onRetake: () => 
   if (!recs.length) recs.push("No urgent flags — a routine annual check-up is still a good idea.");
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-16">
+    <div className="mx-auto max-w-5xl px-4 sm:px-6 py-10 md:py-16">
       {scores.pregnancyFlag && (
         <div className="mb-8 rounded-2xl border border-accent-gold/50 bg-accent-gold/10 p-6 text-sm">
           <strong className="text-foreground">Possible pregnancy — please check this first.</strong>{" "}
@@ -739,9 +739,11 @@ function Results({ saved, onRetake }: { saved: SavedAssessment; onRetake: () => 
         </div>
       )}
 
-      <div className="grid gap-12 md:grid-cols-[0.9fr_1.1fr] md:items-center">
+      <div className="grid gap-8 md:gap-12 md:grid-cols-[0.9fr_1.1fr] md:items-center">
         <div className="flex justify-center">
+          <div className="w-full max-w-[280px] sm:max-w-[340px]">
           <RiskBloom scores={scores} />
+          </div>
         </div>
         <div>
           <div
@@ -751,7 +753,7 @@ function Results({ saved, onRetake }: { saved: SavedAssessment; onRetake: () => 
             <span className="h-2 w-2 rounded-full" style={{ background: overall.hex }} />
             Overall: {overall.label} attention
           </div>
-          <h1 className="mt-4 font-serif text-3xl md:text-4xl">Your cycle risk snapshot</h1>
+          <h1 className="mt-4 font-serif text-2xl sm:text-3xl md:text-4xl">Your cycle risk snapshot</h1>
           <p className="mt-4 text-muted-foreground">{summary}</p>
           {scores.ageNote && (
             <p className="mt-3 text-sm text-accent-gold-soft">Age context: {scores.ageNote}</p>

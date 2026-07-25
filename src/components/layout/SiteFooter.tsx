@@ -17,11 +17,11 @@ export function SiteFooter() {
   const confirmClear = () => {
     storage.clearAll();
     toast.success("All data cleared", {
-      description: "Your NariCare data has been removed. The page will refresh.",
+      description: "Your NariCare data has been removed. Going home...",
     });
     setClearing(false);
     setShowData(false);
-    setTimeout(() => window.location.reload(), 1000);
+    setTimeout(() => window.location.href = "/", 1000);
   };
 
   return (
@@ -54,16 +54,16 @@ export function SiteFooter() {
         {/* Data controls */}
         <div className="flex flex-col items-center justify-center gap-4 pt-4">
           <div className="flex flex-wrap items-center justify-center gap-4 text-[11px] font-mono uppercase tracking-widest text-muted-foreground/70">
-            <Link to="/disclaimer" className="hover:text-accent-gold-soft transition-colors">Medical Disclaimer</Link>
+            <Link to="/disclaimer" className="hover:text-accent-gold-soft transition-colors py-1">Medical Disclaimer</Link>
             <span>·</span>
-            <Link to="/privacy" className="hover:text-accent-gold-soft transition-colors">Privacy Policy</Link>
+            <Link to="/privacy" className="hover:text-accent-gold-soft transition-colors py-1">Privacy Policy</Link>
             <span>·</span>
-            <Link to="/terms" className="hover:text-accent-gold-soft transition-colors">Terms of Service</Link>
+            <Link to="/terms" className="hover:text-accent-gold-soft transition-colors py-1">Terms of Service</Link>
           </div>
 
           <button
             onClick={() => setShowData(!showData)}
-            className="rounded-full border border-hairline/30 px-4 py-1.5 text-[11px] font-mono uppercase tracking-widest text-muted-foreground/70 transition hover:border-accent-gold-soft/50 hover:text-accent-gold-soft mt-2"
+            className="rounded-full border border-hairline/30 px-4 py-2 min-h-[44px] text-[11px] font-mono uppercase tracking-widest text-muted-foreground/70 transition hover:border-accent-gold-soft/50 hover:text-accent-gold-soft mt-2"
           >
             {showData ? "Hide data settings" : "Manage Data"}
           </button>
@@ -73,7 +73,7 @@ export function SiteFooter() {
           <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
             <button
               onClick={handleClear}
-              className="rounded-full border border-high/30 px-4 py-1.5 text-[11px] font-mono uppercase tracking-widest text-high/70 transition hover:border-high hover:text-high"
+              className="rounded-full border border-high/30 px-4 py-2 min-h-[44px] text-[11px] font-mono uppercase tracking-widest text-high/70 transition hover:border-high hover:text-high"
             >
               Clear all history & data
             </button>

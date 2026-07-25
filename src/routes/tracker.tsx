@@ -111,7 +111,7 @@ function TrackerPage() {
     setRemedies((cur) => (cur.includes(r) ? cur.filter((x) => x !== r) : [...cur, r]));
 
   return (
-    <div className="mx-auto max-w-6xl px-6 py-16">
+    <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10 md:py-16">
       <div className="text-center">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -124,7 +124,7 @@ function TrackerPage() {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="mt-4 font-serif text-4xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-accent-gold-soft to-accent-rose pb-2"
+          className="mt-4 font-serif text-3xl sm:text-4xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-accent-gold-soft to-accent-rose pb-2"
         >
           {profile?.name ? `Log today. See tomorrow, ${profile.name}.` : "Log today. See tomorrow."}
         </motion.h1>
@@ -138,7 +138,7 @@ function TrackerPage() {
         </motion.p>
       </div>
 
-      <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_1.2fr]">
+      <div className="mt-8 md:mt-12 grid gap-6 md:gap-8 lg:grid-cols-[1fr_1.2fr]">
         {/* LOG FORM */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
@@ -162,7 +162,7 @@ function TrackerPage() {
               <label className="mb-2 block text-xs font-semibold uppercase tracking-widest text-muted-foreground">
                 Flow
               </label>
-              <div className="grid grid-cols-4 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {FLOW_OPTIONS.map((f) => {
                   const active = flow === f;
                   return (
@@ -196,7 +196,7 @@ function TrackerPage() {
               <label className="mb-2 block text-xs font-semibold uppercase tracking-widest text-muted-foreground">
                 Mood
               </label>
-              <div className="grid grid-cols-5 gap-2">
+              <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                 {MOOD_OPTIONS.map((m) => {
                   const active = mood === m;
                   return (
