@@ -3,7 +3,8 @@ import { useAssessment } from "@/hooks/useAssessment";
 import { CATEGORIES } from "@/lib/health/scoring";
 import { storage, type SavedAssessment } from "@/lib/storage";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, ClipboardList, Check, Sparkles, Printer, Activity, ShieldCheck, AlertCircle } from "lucide-react";
+import { MessageCircle, ClipboardList, Check, Sparkles, Printer, Activity, ShieldCheck, AlertCircle, Copy } from "lucide-react";
+import { toast } from "sonner";
 import { useProfile } from "@/lib/profile";
 import { DoctorSkeleton, PageHeaderSkeleton } from "@/components/ui/page-skeleton";
 import { useState, useMemo, useEffect } from "react";
@@ -306,6 +307,14 @@ function DoctorPage() {
     window.print();
   };
 
+  const handleCopy = () => {
+    const activeQuestions = status === 'complete' ? aiQuestions : fallbackData.questions;
+    const activeTests = status === 'complete' ? aiTests : fallbackData.tests;
+    const text = `NariCare Clinical Checklist\n\nQuestions for Discussion:\n${activeQuestions.map(q => `- ${q.text}`).join('\n')}\n\nTests to Consider:\n${activeTests.map(t => `- ${t.text}`).join('\n')}`;
+    navigator.clipboard.writeText(text);
+    toast.success("Checklist copied to clipboard!");
+  };
+
   if (!ready && !a) {
     return (
       <div className="mx-auto max-w-4xl px-4 sm:px-6 py-10 md:py-16 print:hidden">
@@ -433,12 +442,20 @@ function DoctorPage() {
                 
                 {/* Print button is at the top for convenience if they need to go */}
                 {shouldVisitDoctor && (
-                   <button
-                   onClick={handlePrint}
-                   className="mt-6 btn-primary-glow inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold whitespace-nowrap shadow-lg shadow-accent-gold-soft/20"
-                 >
-                   <Printer className="h-4 w-4" /> Save Checklist as PDF
-                 </button>
+                   <div className="mt-6 flex flex-wrap justify-center gap-3 w-full">
+                     <button
+                       onClick={handlePrint}
+                       className="btn-primary-glow inline-flex items-center gap-2 rounded-full px-5 py-2.5 md:px-6 md:py-3 text-sm font-semibold whitespace-nowrap shadow-lg shadow-accent-gold-soft/20 flex-1 md:flex-none justify-center"
+                     >
+                       <Printer className="h-4 w-4" /> Save PDF
+                     </button>
+                     <button
+                       onClick={handleCopy}
+                       className="inline-flex items-center gap-2 rounded-full border border-hairline px-5 py-2.5 md:px-6 md:py-3 text-sm font-semibold whitespace-nowrap hover:border-accent-gold-soft transition-colors flex-1 md:flex-none justify-center"
+                     >
+                       <Copy className="h-4 w-4" /> Copy
+                     </button>
+                   </div>
                 )}
               </div>
             )}

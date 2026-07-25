@@ -69,43 +69,43 @@ function AskThread() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6 md:px-6 md:py-12">
-      <div className="mb-6 md:mb-8 text-center">
+    <div className="flex flex-col h-full md:mx-auto md:max-w-6xl md:px-6 md:py-8">
+      {/* Mobile Header */}
+      <div className="flex items-center justify-between px-4 py-3 bg-white/5 border-b border-hairline/30 backdrop-blur-md sticky top-0 z-20 md:hidden">
+        <Link to="/" className="p-2 -ml-2 text-accent-gold-soft">
+          <PanelLeftClose className="h-5 w-5" />
+        </Link>
+        <div className="font-serif text-lg tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-accent-gold-soft to-accent-rose">
+          Nari AI
+        </div>
+        <button onClick={newThread} className="p-2 -mr-2 text-accent-rose">
+          <Plus className="h-5 w-5" />
+        </button>
+      </div>
+
+      <div className="hidden md:block mb-8 text-center">
         <div className="eyebrow justify-center">Ask Nari</div>
-        <h1 className="mt-3 font-serif text-2xl sm:text-3xl md:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-accent-gold-soft to-accent-rose pb-1">
+        <h1 className="mt-3 font-serif text-3xl md:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-accent-gold-soft to-accent-rose pb-1">
           Your private AI health companion
         </h1>
       </div>
 
-      {/* Mobile sidebar toggle */}
-      <div className="flex items-center gap-2 mb-4 md:hidden">
-        <button
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="tap-target inline-flex items-center gap-2 rounded-xl border border-hairline/30 bg-white/5 px-3 py-2 text-sm text-muted-foreground transition hover:bg-white/10 hover:text-foreground"
+      <div className="flex-1 flex overflow-hidden md:grid md:grid-cols-[260px_1fr] md:gap-4 h-full relative">
+        {/* Sidebar */}
+        <aside
+          className={`absolute inset-0 z-30 bg-background/95 backdrop-blur-xl md:static md:bg-transparent md:glass-card flex flex-col overflow-hidden h-full transform transition-transform duration-300 ${
+            sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+          }`}
         >
-          {sidebarOpen ? (
-            <><PanelLeftClose className="h-4 w-4" /> Hide chats</>
-          ) : (
-            <><PanelLeftOpen className="h-4 w-4" /> My chats ({threads.length})</>
-          )}
-        </button>
-        <button
-          onClick={newThread}
-          className="tap-target inline-flex items-center gap-2 rounded-xl border border-hairline/30 bg-white/5 px-3 py-2 text-sm text-muted-foreground transition hover:bg-white/10 hover:text-foreground"
-        >
-          <Plus className="h-4 w-4" /> New
-        </button>
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-[260px_1fr]">
-        {/* Sidebar — collapsible on mobile, always visible on md+ */}
-        <aside className={`glass-card flex flex-col overflow-hidden md:h-[640px] ${sidebarOpen ? "max-h-[300px]" : "hidden md:flex"}`}>
-          <div className="border-b border-hairline/50 p-4 bg-black/10 hidden md:block">
+          <div className="flex items-center justify-between border-b border-hairline/50 p-4 bg-black/10">
             <button
               onClick={newThread}
               className="btn-primary-glow flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition-transform active:scale-95"
             >
               <Plus className="h-4 w-4" /> New chat
+            </button>
+            <button className="md:hidden ml-4 p-2 text-muted-foreground" onClick={() => setSidebarOpen(false)}>
+              <PanelLeftOpen className="h-5 w-5" />
             </button>
           </div>
           {ready && threads.length === 0 ? (
@@ -117,7 +117,11 @@ function AskThread() {
                 return (
                   <li key={t.id}>
                     <div
-                      className={`group flex items-center gap-2 rounded-xl px-3 py-2.5 transition-all duration-300 ${active ? "bg-accent-gold-soft/10 border border-accent-gold-soft/20 shadow-[0_0_15px_rgba(240,201,137,0.05)]" : "border border-transparent hover:bg-white/5 hover:border-white/10"}`}
+                      className={`group flex items-center gap-2 rounded-xl px-3 py-2.5 transition-all duration-300 ${
+                        active
+                          ? "bg-accent-gold-soft/10 border border-accent-gold-soft/20 shadow-[0_0_15px_rgba(240,201,137,0.05)]"
+                          : "border border-transparent hover:bg-white/5 hover:border-white/10"
+                      }`}
                     >
                       <Link
                         to="/ask/$threadId"
@@ -126,12 +130,20 @@ function AskThread() {
                         className="flex min-w-0 flex-1 items-center gap-3 text-left text-sm"
                       >
                         <div
-                          className={`flex h-8 w-8 flex-none items-center justify-center rounded-lg transition-colors ${active ? "bg-accent-gold-soft/20 text-accent-gold-soft" : "bg-white/5 text-muted-foreground group-hover:text-foreground"}`}
+                          className={`flex h-8 w-8 flex-none items-center justify-center rounded-lg transition-colors ${
+                            active
+                              ? "bg-accent-gold-soft/20 text-accent-gold-soft"
+                              : "bg-white/5 text-muted-foreground group-hover:text-foreground"
+                          }`}
                         >
                           <MessageSquare className="h-4 w-4" />
                         </div>
                         <span
-                          className={`truncate transition-colors ${active ? "text-accent-gold-soft font-medium" : "text-muted-foreground group-hover:text-foreground"}`}
+                          className={`truncate transition-colors ${
+                            active
+                              ? "text-accent-gold-soft font-medium"
+                              : "text-muted-foreground group-hover:text-foreground"
+                          }`}
                         >
                           {t.title}
                         </span>
@@ -151,10 +163,15 @@ function AskThread() {
           )}
         </aside>
 
-        {/* Chat */}
-        <div className="glass-card overflow-hidden h-[calc(100dvh-16rem)] sm:h-[calc(100dvh-14rem)] md:h-[640px]">
-          <ChatWindow key={thread.id} thread={thread} onMessagesChanged={handleMessages} />
-        </div>
+        {/* Chat Main Window */}
+        <main className="flex-1 flex flex-col min-w-0 h-[calc(100dvh-60px)] md:h-[640px] w-full max-w-full">
+          <ChatWindow
+            key={threadId}
+            thread={thread}
+            compact={false}
+            onMessagesChanged={handleMessages}
+          />
+        </main>
       </div>
     </div>
   );

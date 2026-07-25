@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { CycleWheel } from "@/components/visuals/CycleWheel";
 import { TodayForYou } from "@/components/home/TodayForYou";
-import { ArrowRight, Sparkles, MessageCircle, ShieldCheck } from "lucide-react";
+import { Sparkles, MessageCircle, CalendarHeart } from "lucide-react";
 import { useProfile } from "@/lib/profile";
 
 export const Route = createFileRoute("/")({
@@ -45,7 +45,7 @@ const itemFade = {
 
 function FloatingOrbs() {
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
       <motion.div
         style={{ willChange: "transform, opacity" }}
         animate={{
@@ -54,7 +54,7 @@ function FloatingOrbs() {
           opacity: [0.3, 0.5, 0.3],
         }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-[20%] left-[10%] h-[200px] w-[200px] sm:h-[300px] sm:w-[300px] md:h-[400px] md:w-[400px] rounded-full bg-[radial-gradient(circle_at_center,var(--accent-gold-soft)_0%,transparent_70%)]"
+        className="absolute top-[10%] left-[5%] h-[250px] w-[250px] sm:h-[400px] sm:w-[400px] rounded-full bg-[radial-gradient(circle_at_center,var(--accent-gold-soft)_0%,transparent_70%)] opacity-30"
       />
       <motion.div
         style={{ willChange: "transform, opacity" }}
@@ -64,106 +64,105 @@ function FloatingOrbs() {
           opacity: [0.2, 0.4, 0.2],
         }}
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-        className="absolute bottom-[20%] right-[5%] h-[250px] w-[250px] sm:h-[350px] sm:w-[350px] md:h-[500px] md:w-[500px] rounded-full bg-[radial-gradient(circle_at_center,var(--accent-rose)_0%,transparent_70%)]"
+        className="absolute bottom-[20%] right-[0%] h-[300px] w-[300px] sm:h-[500px] sm:w-[500px] rounded-full bg-[radial-gradient(circle_at_center,var(--accent-rose)_0%,transparent_70%)] opacity-20"
       />
     </div>
   );
 }
 
 function Home() {
-  const { scrollYProgress } = useScroll();
-  const heroY = useTransform(scrollYProgress, [0, 1], [0, 300]);
   const { profile } = useProfile();
 
   return (
-    <div className="relative">
+    <div className="relative min-h-screen pb-20">
       <FloatingOrbs />
 
-      {/* HERO */}
-      <section className="relative z-10 overflow-hidden flex items-center">
+      <section className="relative z-10 px-4 pt-6 sm:pt-10 md:pt-14 mx-auto max-w-4xl flex flex-col items-center">
+        {/* HEADER / GREETING */}
         <motion.div
-          className="mx-auto w-full grid max-w-7xl gap-8 md:gap-14 px-4 sm:px-6 lg:px-8 py-10 sm:py-14 md:py-20 md:grid-cols-[1.1fr_0.9fr] md:items-center"
+          initial="hidden"
+          animate="show"
+          variants={fadeUp}
+          className="text-center w-full mb-6 sm:mb-10"
         >
-          <motion.div
-            initial="hidden"
-            animate="show"
-            variants={fadeUp}
-            className="order-2 md:order-1"
+          <motion.h1
+            variants={itemFade}
+            className="font-serif text-3xl sm:text-4xl md:text-5xl text-transparent bg-clip-text bg-gradient-to-r from-accent-gold-soft to-accent-rose pb-1"
           >
-            <motion.div variants={itemFade} className="eyebrow mb-4 sm:mb-6">
-              <Sparkles className="h-3 w-3" /> A safe space for every Indian woman
-            </motion.div>
+            Hi, {profile?.name || "Nari"}
+          </motion.h1>
+          <motion.p
+            variants={itemFade}
+            className="text-muted-foreground mt-1 text-sm sm:text-base font-medium"
+          >
+            Welcome to your safe haven.
+          </motion.p>
+        </motion.div>
 
-            <motion.h1 variants={itemFade} className="font-serif text-fluid-hero tracking-tight">
-              Your body has a story, {profile?.name || "Nari"}. <br className="hidden md:block" />
-              Let{" "}
-              <em className="italic text-transparent bg-clip-text bg-gradient-to-r from-accent-gold-soft to-accent-rose pb-2 pr-2">
-                Nari
-              </em>{" "}
-              help you listen.
-            </motion.h1>
+        {/* DASHBOARD VISUAL (WHEEL) */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.2, ease: "easeOut", delay: 0.1 }}
+          className="relative flex justify-center w-full mb-8 sm:mb-12"
+        >
+          <div className="absolute inset-0 bg-gradient-to-tr from-accent-rose/10 to-accent-gold-soft/10 blur-[60px] rounded-full z-0 pointer-events-none" />
+          <div className="relative z-10 scale-[0.85] sm:scale-100 transform origin-top -mt-8 sm:mt-0">
+            <CycleWheel />
+          </div>
+        </motion.div>
 
-            <motion.p
-              variants={itemFade}
-              className="mt-4 sm:mt-6 max-w-xl text-base md:text-lg lg:text-xl text-muted-foreground leading-relaxed"
+        {/* QUICK ACTIONS GRID */}
+        <motion.div
+          initial="hidden"
+          animate="show"
+          variants={fadeUp}
+          className="w-full grid grid-cols-2 gap-3 sm:gap-4 mb-10 max-w-lg"
+        >
+          <motion.div variants={itemFade}>
+            <Link
+              to="/tracker"
+              className="glass-card flex flex-col items-center justify-center gap-3 p-4 rounded-3xl active:scale-95 transition-transform h-full hover:bg-white/[0.04]"
             >
-              Welcome to your safe haven. A quiet, private space free from judgment where you can
-              understand your body, track your cycle, and ask the questions you've always wanted to
-              ask. Think of Nari as your wise older sister — she understands the unique nuances of
-              being an Indian woman, and is always here to listen and answer with warmth, love, and
-              absolute privacy.
-            </motion.p>
-
-            <motion.div
-              variants={itemFade}
-              className="mt-6 sm:mt-10 flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4"
-            >
-              <Link
-                to="/assessment"
-                className="btn-primary-glow group inline-flex w-full sm:w-auto items-center justify-center gap-2 sm:gap-3 rounded-full px-6 py-3.5 sm:px-8 sm:py-4 text-sm sm:text-base font-semibold min-h-[48px]"
-              >
-                Begin my check-in{" "}
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-              <Link
-                to="/ask"
-                className="group relative inline-flex w-full sm:w-auto items-center justify-center gap-2 sm:gap-3 rounded-full px-6 py-3.5 sm:px-8 sm:py-4 text-sm sm:text-base font-semibold bg-white/5 border border-white/10 hover:bg-white/10 hover:border-accent-gold-soft/50 transition-all duration-300 min-h-[48px]"
-              >
-                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-accent-gold-soft/0 to-accent-gold-soft/0 group-hover:from-accent-gold-soft/10 group-hover:to-accent-rose/10 transition-all duration-500" />
-                <MessageCircle className="h-4 w-4 text-accent-gold-soft" />
-                <span className="relative z-10">Talk to Nari</span>
-              </Link>
-            </motion.div>
-
-            <motion.p
-              variants={itemFade}
-              className="mt-6 sm:mt-8 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground/80"
-            >
-              <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-accent-gold-soft" />
-              <span>No sign-up</span>
-              <span className="text-accent-gold-soft/30">·</span>
-              <span>Stays in your browser</span>
-              <span className="text-accent-gold-soft/30">·</span>
-              <span>Private</span>
-            </motion.p>
+              <div className="p-3.5 bg-accent-rose/20 rounded-full text-accent-rose shadow-inner shadow-accent-rose/30">
+                <CalendarHeart className="h-6 w-6 sm:h-7 sm:w-7" />
+              </div>
+              <span className="font-medium text-sm sm:text-base tracking-wide text-foreground">Log Symptoms</span>
+            </Link>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
-            className="order-1 md:order-2 relative flex justify-center"
-          >
-            <div className="absolute inset-0 bg-gradient-to-tr from-accent-rose/20 to-accent-gold-soft/20 blur-[80px] rounded-full z-0" />
-            <div className="relative z-10 drop-shadow-[0_0_40px_rgba(240,201,137,0.15)]">
-              <CycleWheel />
-            </div>
+          <motion.div variants={itemFade}>
+            <Link
+              to="/ask"
+              className="glass-card flex flex-col items-center justify-center gap-3 p-4 rounded-3xl active:scale-95 transition-transform h-full hover:bg-white/[0.04]"
+            >
+              <div className="p-3.5 bg-accent-gold-soft/20 rounded-full text-accent-gold-soft shadow-inner shadow-accent-gold-soft/30">
+                <MessageCircle className="h-6 w-6 sm:h-7 sm:w-7" />
+              </div>
+              <span className="font-medium text-sm sm:text-base tracking-wide text-foreground">Talk to Nari</span>
+            </Link>
+          </motion.div>
+
+          <motion.div variants={itemFade} className="col-span-2 mt-1 sm:mt-2">
+            <Link
+              to="/assessment"
+              className="btn-primary-glow flex items-center justify-center gap-2.5 py-4 rounded-2xl active:scale-95 transition-transform shadow-lg shadow-accent-rose/20 w-full"
+            >
+              <Sparkles className="h-5 w-5" />
+              <span className="font-semibold text-sm sm:text-base tracking-wide">Take Check-in Assessment</span>
+            </Link>
           </motion.div>
         </motion.div>
-      </section>
 
-      <section className="content-auto relative z-10 pb-12 sm:pb-16 md:pb-20">
-        <TodayForYou />
+        {/* INSIGHTS / TODAY FOR YOU */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="w-full max-w-3xl"
+        >
+          <TodayForYou />
+        </motion.div>
       </section>
     </div>
   );

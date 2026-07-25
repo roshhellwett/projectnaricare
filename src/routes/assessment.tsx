@@ -173,7 +173,7 @@ function AssessmentPage() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-4 sm:px-6 py-10 md:py-16 overflow-x-hidden">
+    <div className="mx-auto max-w-3xl px-4 sm:px-6 py-6 md:py-16 overflow-x-hidden flex flex-col min-h-[calc(100dvh-140px)] md:min-h-0">
       <div className="text-center">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -200,7 +200,7 @@ function AssessmentPage() {
         </motion.p>
       </div>
 
-      <div className="mt-8 md:mt-12 glass-panel p-4 sm:p-6 md:p-10 relative">
+      <div className="mt-6 md:mt-12 glass-panel p-5 sm:p-6 md:p-10 relative flex-1 flex flex-col">
         <div className="h-1 overflow-hidden rounded-full bg-surface-light">
           <motion.div
             className="h-full bg-gradient-to-r from-accent-gold to-accent-rose"
@@ -234,7 +234,7 @@ function AssessmentPage() {
 
         {err && <p className="mt-4 text-sm text-high">{err}</p>}
 
-        <div className="mt-8 flex items-center justify-between border-t border-hairline pt-6">
+        <div className="mt-auto pt-8 flex items-center justify-between border-t border-hairline md:pt-6">
           <button
             type="button"
             onClick={() => {
@@ -248,7 +248,7 @@ function AssessmentPage() {
           <button
             type="button"
             onClick={next}
-            className="btn-primary-glow inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-sm font-semibold"
+            className="btn-primary-glow inline-flex items-center gap-2 rounded-full px-6 py-3 md:py-2.5 text-sm font-semibold"
           >
             {step === 6 ? "See my results" : "Continue"} <ArrowRight className="h-4 w-4" />
           </button>

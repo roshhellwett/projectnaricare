@@ -135,7 +135,7 @@ export function ChatWindow({
   };
 
   return (
-    <div className={`relative flex flex-col overflow-hidden ${compact ? "h-[420px] sm:h-[520px]" : "h-full"}`}>
+    <div className={`flex flex-col h-full w-full ${compact ? "rounded-3xl glass-card shadow-2xl" : "md:rounded-3xl md:glass-card md:shadow-2xl"} overflow-hidden relative`}>
       {/* Animated gradient background specifically for the chat area */}
       <div className="absolute inset-0 bg-gradient-to-br from-black/20 via-transparent to-black/20 pointer-events-none" />
       <motion.div

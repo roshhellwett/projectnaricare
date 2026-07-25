@@ -165,7 +165,7 @@ function HistoryPage() {
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-2">
+            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide -mx-6 px-6 md:mx-0 md:px-0 md:flex-wrap w-full">
               {CATEGORIES.map(c => (
                 <button
                   key={c.key}

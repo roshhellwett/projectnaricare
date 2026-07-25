@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import logoUrl from "@/assets/logo.png";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -14,9 +14,11 @@ const links = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const location = useLocation();
+  const isAskRoute = location.pathname.startsWith("/ask");
 
   return (
-    <header className="sticky top-0 z-40 border-b border-hairline bg-[#1c1220]/80 backdrop-blur-xl supports-[backdrop-filter]:bg-[#1c1220]/60 print:hidden">
+    <header className={`sticky top-0 z-40 border-b border-hairline bg-[#1c1220]/80 backdrop-blur-xl supports-[backdrop-filter]:bg-[#1c1220]/60 print:hidden ${isAskRoute ? 'hidden md:block' : ''}`}>
       <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-6 sm:py-4 md:grid-cols-[1fr_auto_1fr]">
         <div className="flex min-w-0 items-center justify-start">
           <Link to="/" className="group flex min-w-0 items-center gap-3">
