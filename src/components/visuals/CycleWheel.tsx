@@ -2,34 +2,26 @@ import { motion, useReducedMotion } from "framer-motion";
 import flowerUrl from "@/assets/flower.png";
 
 import { useMouseTilt } from "@/hooks/useMouseTilt";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 /**
- * Static gerbera daisy hero visual with gentle idle sway,
- * mouse-driven parallax tilt, and orbiting golden pollen.
- * Now responsive — shows a smaller version on mobile.
+ * A fluid hero visual. Percentage-based orbits keep the artwork inside its
+ * column at every viewport width, avoiding the old tablet overflow.
  */
 export function CycleWheel() {
   const reduce = useReducedMotion();
-  const isMobile = useIsMobile();
   const { rx, ry } = useMouseTilt(4);
-
-  // Responsive size: 280px on mobile, 480px on tablets, 780px on desktop
-  const size = isMobile ? 280 : 780;
-
   const orbits = [
-    { r: size * 0.46, dur: 26, delay: 0, dot: 6 },
-    { r: size * 0.52, dur: 34, delay: 2, dot: 4 },
-    { r: size * 0.4, dur: 22, delay: 4, dot: 5 },
-    { r: size * 0.5, dur: 30, delay: 6, dot: 3 },
+    { radius: 46, dur: 26, delay: 0, dot: 6 },
+    { radius: 52, dur: 34, delay: 2, dot: 4 },
+    { radius: 40, dur: 22, delay: 4, dot: 5 },
+    { radius: 50, dur: 30, delay: 6, dot: 3 },
   ];
 
   return (
     <div
-      className="relative flex items-center justify-center"
-      style={{ width: size, height: size, perspective: 1200 }}
+      className="relative flex aspect-square w-[clamp(17.5rem,72vw,35rem)] max-w-full items-center justify-center"
+      style={{ perspective: 1200 }}
     >
-      {/* Soft aurora halo */}
       <motion.div
         aria-hidden
         className="absolute inset-0 rounded-full"
@@ -42,24 +34,32 @@ export function CycleWheel() {
         transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
       />
 
-      {/* Orbiting pollen dots — skip on mobile for perf */}
       {!reduce &&
-        !isMobile &&
-        orbits.map((o, i) => (
+        orbits.map((orbit, index) => (
           <motion.div
-            key={i}
-            className="absolute left-1/2 top-1/2"
-            style={{ width: o.r * 2, height: o.r * 2, marginLeft: -o.r, marginTop: -o.r }}
-            animate={{ rotate: i % 2 === 0 ? 360 : -360 }}
-            transition={{ duration: o.dur, delay: o.delay, repeat: Infinity, ease: "linear" }}
+            key={index}
+            className="absolute left-1/2 top-1/2 hidden md:block"
+            style={{
+              width: `${orbit.radius * 2}%`,
+              height: `${orbit.radius * 2}%`,
+              marginLeft: `-${orbit.radius}%`,
+              marginTop: `-${orbit.radius}%`,
+            }}
+            animate={{ rotate: index % 2 === 0 ? 360 : -360 }}
+            transition={{
+              duration: orbit.dur,
+              delay: orbit.delay,
+              repeat: Infinity,
+              ease: "linear",
+            }}
           >
             <span
               className="absolute rounded-full"
               style={{
-                width: o.dot,
-                height: o.dot,
-                top: -o.dot / 2,
-                left: `calc(50% - ${o.dot / 2}px)`,
+                width: orbit.dot,
+                height: orbit.dot,
+                top: -orbit.dot / 2,
+                left: `calc(50% - ${orbit.dot / 2}px)`,
                 background: "rgba(240,201,137,0.9)",
                 boxShadow: "0 0 12px rgba(240,201,137,0.9)",
               }}
@@ -67,29 +67,21 @@ export function CycleWheel() {
           </motion.div>
         ))}
 
-      {/* The flower — idle sway + breathe + mouse tilt */}
       <motion.img
         src={flowerUrl}
         alt="Gerbera daisy"
-        width={size}
-        height={size}
+        width={560}
+        height={560}
         style={{
-          width: size,
-          height: size,
+          width: "100%",
+          height: "100%",
           rotateX: reduce ? 0 : rx,
           rotateY: reduce ? 0 : ry,
           transformStyle: "preserve-3d",
         }}
-        className="relative z-10 select-none object-contain drop-shadow-[0_36px_100px_rgba(168,68,106,0.5)]"
+        className="relative z-10 select-none object-contain drop-shadow-[0_28px_72px_rgba(168,68,106,0.42)]"
         draggable={false}
-        animate={
-          reduce
-            ? {}
-            : {
-                rotate: [-2, 2, -2],
-                scale: [1, 1.015, 1],
-              }
-        }
+        animate={reduce ? {} : { rotate: [-2, 2, -2], scale: [1, 1.015, 1] }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
       />
     </div>

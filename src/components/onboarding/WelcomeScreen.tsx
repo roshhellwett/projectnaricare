@@ -16,12 +16,12 @@ export function WelcomeScreen() {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex flex-col bg-bg text-foreground">
+    <div className="fixed inset-0 z-[100] flex flex-col overflow-y-auto bg-background text-foreground">
       {/* Background gradients */}
       <div className="pointer-events-none fixed left-0 top-0 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent-rose/10 blur-[120px]" />
       <div className="pointer-events-none fixed bottom-0 right-0 h-[400px] w-[400px] translate-x-1/3 translate-y-1/3 rounded-full bg-accent-gold-soft/10 blur-[100px]" />
 
-      <main className="relative flex flex-1 flex-col items-center justify-center px-6 py-12 md:px-12">
+      <main className="relative flex flex-1 flex-col items-center justify-center px-6 py-8 sm:py-12 md:px-12">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -39,7 +39,8 @@ export function WelcomeScreen() {
               Welcome to your safe space.
             </h1>
             <p className="mt-4 text-sm text-muted-foreground leading-relaxed md:text-base">
-              Hi yaar! I'm Nari. I'm here for all your cycle rants and health questions, with absolutely zero judgment. Tell me a bit about yourself so we can vibe better!
+              Hi yaar! I'm Nari. I'm here for all your cycle rants and health questions, with
+              absolutely zero judgment. Tell me a bit about yourself so we can vibe better!
             </p>
           </div>
 

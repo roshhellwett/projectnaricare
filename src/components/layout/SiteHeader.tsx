@@ -2,13 +2,7 @@ import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import logoUrl from "@/assets/logo.png";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
 const links = [
   { to: "/assessment", label: "Assessment" },
@@ -22,8 +16,8 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-hairline bg-[#1c1220]/60 backdrop-blur-xl print:hidden">
-      <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-6 sm:py-4 md:grid-cols-[1fr_auto_1fr]">
+    <header className="sticky top-0 z-40 border-b border-hairline bg-[#1c1220]/80 backdrop-blur-xl supports-[backdrop-filter]:bg-[#1c1220]/60 print:hidden">
+      <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-6 sm:py-4 md:grid-cols-[1fr_auto_1fr]">
         <div className="flex min-w-0 items-center justify-start">
           <Link to="/" className="group flex min-w-0 items-center gap-3">
             <img
@@ -71,13 +65,16 @@ export function SiteHeader() {
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <button
-                className="flex h-11 w-11 items-center justify-center rounded-xl border border-hairline/30 bg-white/5 text-foreground transition-colors hover:bg-white/10 md:hidden"
+                className="tap-target flex items-center justify-center rounded-xl border border-hairline/30 bg-white/5 text-foreground transition-colors hover:bg-white/10 active:scale-95 md:hidden"
                 aria-label="Open menu"
               >
                 <Menu className="h-5 w-5" />
               </button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[280px] border-l border-hairline bg-[#1c1220] p-0">
+            <SheetContent
+              side="right"
+              className="w-[280px] border-l border-hairline bg-[#1c1220] p-0"
+            >
               <SheetHeader className="border-b border-hairline/50 px-5 py-4">
                 <SheetTitle className="flex items-center gap-3 text-left">
                   <img

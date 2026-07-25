@@ -17,7 +17,10 @@ export function BottomNav() {
   if (location.pathname.startsWith("/ask")) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-between border-t border-hairline bg-[#1c1220]/90 px-1 pb-[env(safe-area-inset-bottom,0)] pt-1.5 backdrop-blur-xl md:hidden print:hidden">
+    <nav
+      aria-label="Primary navigation"
+      className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-between border-t border-hairline bg-[#1c1220]/95 px-1 pb-[env(safe-area-inset-bottom,0)] pt-1.5 backdrop-blur-xl md:hidden print:hidden"
+    >
       {navItems.map((item) => {
         const isActive = location.pathname === item.to;
         return (
@@ -25,8 +28,10 @@ export function BottomNav() {
             key={item.to}
             to={item.to}
             className={cn(
-              "relative flex flex-1 flex-col items-center justify-center gap-0.5 rounded-xl py-2 min-h-[52px] text-[10px] transition-colors",
-              isActive ? "text-accent-gold-soft font-medium" : "text-muted-foreground hover:text-foreground"
+              "relative flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-xl py-2 min-h-[52px] text-[10px] transition-[color,transform] active:scale-95",
+              isActive
+                ? "text-accent-gold-soft font-medium"
+                : "text-muted-foreground hover:text-foreground",
             )}
           >
             {item.icon}
@@ -37,7 +42,6 @@ export function BottomNav() {
           </Link>
         );
       })}
-    </div>
-
+    </nav>
   );
 }

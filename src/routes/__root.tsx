@@ -22,7 +22,6 @@ import { FloatingChat } from "@/components/chat/FloatingChat";
 import { WelcomeScreen } from "@/components/onboarding/WelcomeScreen";
 import { useProfile } from "@/lib/profile";
 
-
 function NotFoundComponent() {
   return (
     <div className="flex min-h-[100dvh] items-center justify-center px-4">
@@ -100,7 +99,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { name: "theme-color", content: "#4b2130" },
       {
         title: "NariCare — India's most private, AI-powered women's health companion",
@@ -163,7 +162,6 @@ const pageVariants = {
   },
 } as const;
 
-
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const location = useLocation();
@@ -200,7 +198,7 @@ function RootComponent() {
               initial="initial"
               animate="enter"
               exit="exit"
-              className="h-full"
+              className="page-shell h-full"
             >
               <Outlet />
             </motion.div>
@@ -211,7 +209,6 @@ function RootComponent() {
         <BottomNav />
         <FloatingChat />
       </div>
-
     </QueryClientProvider>
   );
 }
