@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { CycleWheel } from "@/components/visuals/CycleWheel";
-import { TodayForYou } from "@/components/home/TodayForYou";
 import { Sparkles, MessageCircle, CalendarHeart } from "lucide-react";
 import { useProfile } from "@/lib/profile";
 
@@ -74,7 +73,7 @@ function Home() {
   const { profile } = useProfile();
 
   return (
-    <div className="relative min-h-screen pb-20">
+    <div className="relative min-h-screen pb-10">
       <FloatingOrbs />
 
       <section className="relative z-10 px-4 pt-6 sm:pt-10 md:pt-14 mx-auto max-w-4xl flex flex-col items-center">
@@ -117,7 +116,7 @@ function Home() {
           initial="hidden"
           animate="show"
           variants={fadeUp}
-          className="w-full grid grid-cols-2 gap-3 sm:gap-4 mb-10 max-w-lg"
+          className="w-full grid grid-cols-2 gap-3 sm:gap-4 max-w-lg"
         >
           <motion.div variants={itemFade}>
             <Link
@@ -152,16 +151,6 @@ function Home() {
               <span className="font-semibold text-sm sm:text-base tracking-wide">Take Check-in Assessment</span>
             </Link>
           </motion.div>
-        </motion.div>
-
-        {/* INSIGHTS / TODAY FOR YOU */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="w-full max-w-3xl"
-        >
-          <TodayForYou />
         </motion.div>
       </section>
     </div>
